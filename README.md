@@ -28,11 +28,11 @@ In Error-Messages the following Informations are badly needed:
  * how to avoid the error in the future
 not only for the user but also for you the developer.
 
-we could easily solve the task by using a globally available standard error message
-so lets do a module for our error messages (see module "MErr")
+We could easily solve the task by using a globally available standard error message.
+So let's use a module for our error messages (see module "MErr")
 
-In VB.net there is the Try..Catch..Finally-syntax
-this is very useful because we have a standard syntax always for the same thing
+In VB.net there is the Try..Catch..Finally-syntax.
+This is very useful because we have a standard syntax always for the same thing
 
 But don't hesitate we can do it in VBC very similiar like this:
 
@@ -45,16 +45,17 @@ Try: On Error GoTo Catch
 	GoTo Finally
 Catch:
 '. . .
+Finally:
+End Sub
 ```
 
-Instead of GoTo Finally you could also use "Exit Sub", "Exit Function" or "Exit Property"
-but using Goto Finally instead is more generic, because you even do not have to distinguish 
-between Sub, Function or Property, so reusing the code is really easy.
+Instead of "GoTo Finally" you could also use "Exit Sub", "Exit Function" or "Exit Property",
+but using "Goto Finally" instead is more generic, because you even do not have to distinguish 
+between Sub, Function or Property, so reusing the code is made more easily.
 
 Now call the ErrHandler function, which can be private in every class, form or module.
-Add the information: "name of the function", VB already knows the name of the class or form
-you even have the chance to call the function more times by using "On Error GoTo -1" before "GoTo Try"
-
+Add the information: "name of the function", VB already knows the name of the class or form.
+You even have the chance to call the function plenty of times, by using "On Error GoTo -1" before "GoTo Try"
 ```vba
     If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
         On Error GoTo -1
@@ -65,9 +66,8 @@ End Sub
 ```
 
 This is how the function "ErrHandler" looks like. Just use it in every class or form, the name 
-of the class for form will be added automatically. In standard-modules the function "TypeName(Me)" 
-will not work, so simply replace it with the name of the Module
-
+of the class or form will be added automatically. In standard-modules the function "TypeName(Me)" 
+will not work, so simply replace it with the name of the module.
 ```vba
 ' v ############################## v '   Local ErrHandler   ' v ############################## v '
 Private Function ErrHandler(ByVal FuncName As String, _
@@ -84,7 +84,7 @@ Private Function ErrHandler(ByVal FuncName As String, _
 End Function
 ```
 
-And the globally available Function MessError in the Module MErr that finally shows the error-message, could look like this:
+And the globally available Function MessError in the module "MErr" that finally shows the error-message, could look like this:
 ```vba
 Public ErrLog As String
 
@@ -113,5 +113,6 @@ Public Function MessErrorRetry(ClsName As String, FncName As String, _
     MessErrorRetry = MessError(ClsName, FncName, AddInfo, True, bErrLog, vbRetryCancel)
 End Function
 ```
+That's it, simple as that.
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")
