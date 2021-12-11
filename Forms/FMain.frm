@@ -91,13 +91,17 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub BtnFileOpen1_Click()
-Try: On Error GoTo Catch
+Try:
+    On Error GoTo Catch
     m_FNr1 = OOpen(m_PFN)
     Text1.Text = ReadContent(m_FNr1)
     If m_FNr1 Then ToggleBtn1
     Exit Sub
 Catch:
-    If ErrHandler("BtnFileOpen1_Click", , , , , True) = vbRetry Then GoTo Try:
+    If ErrHandler("BtnFileOpen1_Click", , , , , True) = vbRetry Then
+        On Error GoTo -1
+        GoTo Try
+    End If
 End Sub
 
 Private Sub BtnFileClose1_Click()
@@ -121,7 +125,6 @@ Private Sub BtnFileOpen2_Click()
 End Sub
 
 Private Sub BtnFileClose2_Click()
-    
     Close m_FNr2
     m_FNr2 = 0
     ToggleBtn2
@@ -129,7 +132,7 @@ End Sub
 
 Private Sub BtnStartExe_Click()
     'Shell App.Path & "\" & App.EXEName & ".exe"
-    Shell App.Path & "\" & "ErrorHandling.exe"
+    Shell App.Path & "\" & "ErrorHandling.exe", vbNormalFocus
 End Sub
 
 
@@ -160,8 +163,8 @@ End Sub
 'But don't hesitate we can do it in VBC very similiarly like this:
 'just add "GoTo Finally" before "Catch:"
 Private Function OOpen(PFN As String) As Integer
-
-Try: On Error GoTo Catch
+'    On Error GoTo Catch
+'Try:
     
     Dim FNr As Integer: If FNr = 0 Then FNr = FreeFile
     
@@ -169,8 +172,8 @@ Try: On Error GoTo Catch
     
     OOpen = FNr
     
-    GoTo Finally
-Catch:
+    'GoTo Finally
+'Catch:
     'On Error GoTo 0
     'call the Errhandler function, which is private in every class, form or module
     'add the information: "name of the function", the name of the class or form is known
@@ -178,11 +181,11 @@ Catch:
     'Dim mr As VbMsgBoxResult
     'mr = ErrHandler("Open", "Trying to open the file: " & PFN, , , , True)
     'If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
-    Close FNr
-    FNr = 0
-    Err.Raise 70
+    'Close FNr
+    'FNr = 0
+    'Err.Raise 70
     'If mr = vbRetry Then GoTo Try
-Finally:
+'Finally:
     'On Error GoTo 0
     'Err.Clear
 End Function

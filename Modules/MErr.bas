@@ -27,4 +27,3 @@ Public Function MessErrorRetry(ClsName As String, FncName As String, _
     MessErrorRetry = MessError(ClsName, FncName, AddInfo, True, bErrLog, vbRetryCancel)
 End Function
 
-

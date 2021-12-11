@@ -33,8 +33,10 @@ Try: On Error GoTo Catch
     GoTo Finally
 Catch:
     'On Error GoTo 0
-    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then GoTo Try
-    
+    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
+        On Error GoTo -1
+        GoTo Try
+    End If
 Finally:
     
 End Function
@@ -48,7 +50,10 @@ Try: On Error GoTo Catch
     ReadContent = s
     Exit Function
 Catch:
-    ErrHandler "ReadContent"
+    If ErrHandler("ReadContent", , , , , True) = vbRetry Then
+        On Error GoTo -1
+        GoTo Try
+    End If
 End Function
 Public Sub CClose()
     Close FNr
