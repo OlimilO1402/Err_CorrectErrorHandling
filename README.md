@@ -53,7 +53,7 @@ between Sub, Function or Property, so reusing the code is made more easily.
 
 Now call the ErrHandler function, which can be private in every class, form or module.
 Add the information: "name of the function", VB already knows the name of the class or form.
-You even have the chance to call the function plenty of times, by using "On Error GoTo -1" before "GoTo Try"
+You even have the chance to call the function plenty of times, by using "Resume Try"
 ```vba
     If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
         Resume Try
