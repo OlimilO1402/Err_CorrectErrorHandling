@@ -5,10 +5,19 @@ Begin VB.Form FMain
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   7215
+   Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   3015
    ScaleWidth      =   7215
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnInfo 
+      Caption         =   "Info"
+      Height          =   495
+      Left            =   5040
+      TabIndex        =   7
+      Top             =   840
+      Width           =   1935
+   End
    Begin VB.TextBox Text2 
       Height          =   1095
       Left            =   2640
@@ -78,11 +87,13 @@ Private m_FNr2 As Integer
 
 Private m_File As PathFileName
 
-'und wenn man statt Datei öffnen einfach umbenennen nimmt?
+Private Sub BtnInfo_Click()
+    MsgBox App.CompanyName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation
+End Sub
 
 Private Sub Form_Load()
     
-    'for showing correct error handling we have to produce/provoke an error
+    'for showing correct error handling we just have to provoke an error
     m_PFN = App.Path & "\testfile.txt"
     Set m_File = New PathFileName: m_File.PFN = m_PFN
     Me.BtnFileClose1.Enabled = False
@@ -91,17 +102,24 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub BtnFileOpen1_Click()
-Try:
-    On Error GoTo Catch
+
+Try: On Error GoTo Catch
+
     m_FNr1 = OOpen(m_PFN)
+    
     Text1.Text = ReadContent(m_FNr1)
+    
     If m_FNr1 Then ToggleBtn1
-    Exit Sub
+    
+    GoTo Finally
 Catch:
+
     If ErrHandler("BtnFileOpen1_Click", , , , , True) = vbRetry Then
         On Error GoTo -1
         GoTo Try
     End If
+    
+Finally:
 End Sub
 
 Private Sub BtnFileClose1_Click()
@@ -131,7 +149,6 @@ Private Sub BtnFileClose2_Click()
 End Sub
 
 Private Sub BtnStartExe_Click()
-    'Shell App.Path & "\" & App.EXEName & ".exe"
     Shell App.Path & "\" & "ErrorHandling.exe", vbNormalFocus
 End Sub
 
@@ -143,9 +160,9 @@ End Sub
 'ErrHandler:
 '    MsgBox Err.Description
 
-'and they end up having plenty of MsgBoxes, doing similar things, spreaded all over the code.
+'and most of the time they end up having plenty of MsgBoxes, doing similar things, spreaded all over the code.
 
-'In Error-Messages almost _always_ the following Informations are needed:
+'In Error-Messages the following Informations are _always_ needed:
 ' * the name of the class where the error occurs
 ' * the name of the function where the error occurs
 ' * some additional information about the specific object the filename etc.
@@ -153,7 +170,7 @@ End Sub
 ' * how to avoid this error
 'not only for the user but essentially for you the developer
 
-'we could easily solve the task by using a globally availabel standard error message
+'we could easily solve the task by using a globally available standard error message
 'so lets do a module for our error messages (see module "MErr")
 
 
@@ -162,9 +179,10 @@ End Sub
 
 'But don't hesitate we can do it in VBC very similiarly like this:
 'just add "GoTo Finally" before "Catch:"
+
 Private Function OOpen(PFN As String) As Integer
-'    On Error GoTo Catch
-'Try:
+    
+Try: On Error GoTo Catch
     
     Dim FNr As Integer: If FNr = 0 Then FNr = FreeFile
     
@@ -172,32 +190,35 @@ Private Function OOpen(PFN As String) As Integer
     
     OOpen = FNr
     
-    'GoTo Finally
-'Catch:
-    'On Error GoTo 0
-    'call the Errhandler function, which is private in every class, form or module
+    GoTo Finally
+    'here you could also use "Exit Sub", "Exit Function" or "Exit Property"
+    'but using Goto Finally is more generic, because you even do not have to
+    'distinguish between Sub, Function or Property, so code copying is easy
+Catch:
+    'call the ErrHandler function, which can be private in every class, form or module
     'add the information: "name of the function", the name of the class or form is known
-    'you even have to chance to call the funvction twice
-    'Dim mr As VbMsgBoxResult
-    'mr = ErrHandler("Open", "Trying to open the file: " & PFN, , , , True)
-    'If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
-    'Close FNr
-    'FNr = 0
-    'Err.Raise 70
-    'If mr = vbRetry Then GoTo Try
-'Finally:
-    'On Error GoTo 0
-    'Err.Clear
+    'you even have the chance to call the function more times
+    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
+        On Error GoTo -1
+        GoTo Try
+    End If
+Finally:
 End Function
 
 Private Function ReadContent(ByVal FNr As Integer) As String
+
 Try: On Error GoTo Catch
+    
     Dim s As String: s = Space(LOF(FNr))
+    
     Get FNr, , s
+    
     ReadContent = s
-    Exit Function
+    
+    GoTo Finally
 Catch:
     ErrHandler "ReadContent"
+Finally:
 End Function
 
 'copy this same function to every class or form
@@ -210,7 +231,6 @@ Private Function ErrHandler(ByVal FuncName As String, _
                             Optional bErrLog As Boolean = True, _
                             Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
                             Optional bRetry As Boolean) As VbMsgBoxResult
-    'ErrHandler = GlobalErrHandler(Me, PrcName, AddInfo, BolLoud, bErrLog, vbDecor)
     If bRetry Then
         ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, bErrLog)
     Else
