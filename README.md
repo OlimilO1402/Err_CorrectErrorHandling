@@ -1,5 +1,5 @@
 # Err_CorrectErrorHandling  
-## How to handle errors in VB the easy and correct way  
+## How to handle errors in VBC the easy and correct way  
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/Err_CorrectErrorHandling?style=plastic)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Err_CorrectErrorHandling?style=plastic)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/releases/latest)
