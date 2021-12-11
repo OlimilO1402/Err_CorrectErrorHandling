@@ -114,10 +114,7 @@ Try: On Error GoTo Catch
     GoTo Finally
 Catch:
 
-    If ErrHandler("BtnFileOpen1_Click", , , , , True) = vbRetry Then
-        On Error GoTo -1
-        GoTo Try
-    End If
+    If ErrHandler("BtnFileOpen1_Click", , , , , True) = vbRetry Then Resume Try
     
 Finally:
 End Sub
@@ -198,10 +195,8 @@ Catch:
     'call the ErrHandler function, which can be private in every class, form or module
     'add the information: "name of the function", the name of the class or form is known
     'you even have the chance to call the function more times
-    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
-        On Error GoTo -1
-        GoTo Try
-    End If
+    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then Resume Try
+
 Finally:
 End Function
 

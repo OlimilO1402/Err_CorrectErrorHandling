@@ -3,13 +3,12 @@
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/Err_CorrectErrorHandling?style=plastic)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Err_CorrectErrorHandling?style=plastic)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/releases/latest)
-[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Err_CorrectErrorHandling/total.svg)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/releases/download/v1.0.11/ErrorHandling_v1.0.11.zip)
+[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Err_CorrectErrorHandling/total.svg)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/releases/download/v1.0.12/ErrorHandling_v1.0.12.zip)
 [![Follow](https://img.shields.io/github/followers/OlimilO1402.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/watchers)
 
 Project started around may 2005.  
 
 In VBC we often see code similar to the following
-
 ```vba
     On Error GoTo ErrHandler
     '. . . some error-prone code here . . .
@@ -35,7 +34,6 @@ In VB.net there is the Try..Catch..Finally-syntax.
 This is very useful because we have a standard syntax always for the same thing
 
 But don't hesitate we can do it in VBC very similiar like this:
-
 ```vba
 Sub DoIt()
 Try: On Error GoTo Catch
@@ -58,8 +56,7 @@ Add the information: "name of the function", VB already knows the name of the cl
 You even have the chance to call the function plenty of times, by using "On Error GoTo -1" before "GoTo Try"
 ```vba
     If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
-        On Error GoTo -1
-        GoTo Try
+        Resume Try
     End If
 Finally:
 End Sub
