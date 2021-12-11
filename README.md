@@ -10,13 +10,13 @@ Project started around may 2005.
 
 In VBC we often see code similar to the following
 
-[VBA]
+```vba
     On Error GoTo ErrHandler
     '. . . some error-prone code here . . .
     Exit Sub/Function/Property
 ErrHandler:
     MsgBox Err.Description
-[/VBA]
+```
 
 and most of the time they end up having plenty of MsgBoxes, doing similar things, spreaded all over the code.
 
@@ -36,7 +36,7 @@ this is very useful because we have a standard syntax always for the same thing
 
 But don't hesitate we can do it in VBC very similiar like this:
 
-[VBA]
+```vba
 Sub DoIt()
 Try: On Error GoTo Catch
     
@@ -45,7 +45,7 @@ Try: On Error GoTo Catch
 	GoTo Finally
 Catch:
 '. . .
-[/VBA]
+```
 
 Instead of GoTo Finally you could also use "Exit Sub", "Exit Function" or "Exit Property"
 but using Goto Finally instead is more generic, because you even do not have to distinguish 
@@ -55,20 +55,20 @@ Now call the ErrHandler function, which can be private in every class, form or m
 Add the information: "name of the function", VB already knows the name of the class or form
 you even have the chance to call the function more times by using "On Error GoTo -1" before "GoTo Try"
 
-[VBA]
+```vba
     If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then
         On Error GoTo -1
         GoTo Try
     End If
 Finally:
 End Sub
-[/VBA]
+```
 
 This is how the function "ErrHandler" looks like. Just use it in every class or form, the name 
 of the class for form will be added automatically. In standard-modules the function "TypeName(Me)" 
 will not work, so simply replace it with the name of the Module
 
-[VBA]
+```vba
 ' v ############################## v '   Local ErrHandler   ' v ############################## v '
 Private Function ErrHandler(ByVal FuncName As String, _
                             Optional AddInfo As String, _
@@ -82,10 +82,10 @@ Private Function ErrHandler(ByVal FuncName As String, _
         ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, BolLoud, bErrLog, vbDecor)
     End If
 End Function
-[/VBA]
+```
 
 And the globally available Function MessError in the Module MErr that finally shows the error-message, could look like this:
-[VBA]
+```vba
 Public ErrLog As String
 
 Public Function MessError(ClsName As String, FncName As String, _
@@ -112,7 +112,6 @@ Public Function MessErrorRetry(ClsName As String, FncName As String, _
                                Optional bErrLog As Boolean = True) As VbMsgBoxResult
     MessErrorRetry = MessError(ClsName, FncName, AddInfo, True, bErrLog, vbRetryCancel)
 End Function
-
-[/VBA]
+```
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")
