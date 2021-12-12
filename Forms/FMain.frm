@@ -88,12 +88,14 @@ Private m_FNr2 As Integer
 Private m_File As PathFileName
 
 Private Sub BtnInfo_Click()
+    
     MsgBox App.CompanyName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation
+    
 End Sub
 
 Private Sub Form_Load()
     
-    'for showing correct error handling we just have to provoke an error
+    'for showing correct error handling we first have to provoke an error
     m_PFN = App.Path & "\testfile.txt"
     Set m_File = New PathFileName: m_File.PFN = m_PFN
     Me.BtnFileClose1.Enabled = False
@@ -117,6 +119,7 @@ Catch:
     If ErrHandler("BtnFileOpen1_Click", , , , , True) = vbRetry Then Resume Try
     
 Finally:
+
 End Sub
 
 Private Sub BtnFileClose1_Click()
@@ -158,6 +161,9 @@ End Sub
 '    MsgBox Err.Description
 
 'and most of the time they end up having plenty of MsgBoxes, doing similar things, spreaded all over the code.
+
+'During an error the user often is in a kind of shock-situation
+'so don't be rude and give informations what is to do now!
 
 'In Error-Messages the following Informations are _always_ needed:
 ' * the name of the class where the error occurs
@@ -217,7 +223,7 @@ Finally:
 End Function
 
 'copy this same function to every class or form
-'the name of the class for form will be added automatically
+'the name of the class or form will be added automatically
 'in standard-modules the function "TypeName(Me)" will not work, so simply replace it with the name of the Module
 ' v ############################## v '   Local ErrHandler   ' v ############################## v '
 Private Function ErrHandler(ByVal FuncName As String, _
@@ -226,10 +232,16 @@ Private Function ErrHandler(ByVal FuncName As String, _
                             Optional bErrLog As Boolean = True, _
                             Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
                             Optional bRetry As Boolean) As VbMsgBoxResult
+    
     If bRetry Then
+        
         ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, bErrLog)
+        
     Else
+        
         ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, BolLoud, bErrLog, vbDecor)
+        
     End If
+    
 End Function
 

@@ -32,7 +32,7 @@ Try: On Error GoTo Catch
     
     GoTo Finally
 Catch:
-    'On Error GoTo 0
+    
     If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then Resume Try
 
 Finally:
@@ -40,16 +40,28 @@ Finally:
 End Function
 
 Public Function ReadContent() As String
+    
 Try: On Error GoTo Catch
+    
     If FNr = 0 Then FNr = OOpen
+    
     If FNr = 0 Then Exit Function
+    
     Dim s As String: s = Space(LOF(FNr))
+    
     Get FNr, , s
+    
     ReadContent = s
-    Exit Function
+    
+    GoTo Finally
 Catch:
+    
     If ErrHandler("ReadContent", , , , , True) = vbRetry Then Resume Try
+    
+Finally:
+    
 End Function
+
 Public Sub CClose()
     Close FNr
     FNr = 0
@@ -57,7 +69,7 @@ End Sub
 
 
 'copy this same function to every class or form
-'the name of the class for form will be added automatically
+'the name of the class or form will be added automatically
 'in standard-modules the function "TypeName(Me)" will not work, so simply replace it with the name of the Module
 ' v ############################## v '   Local ErrHandler   ' v ############################## v '
 Private Function ErrHandler(ByVal FuncName As String, _
@@ -66,12 +78,17 @@ Private Function ErrHandler(ByVal FuncName As String, _
                             Optional bErrLog As Boolean = True, _
                             Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
                             Optional bRetry As Boolean) As VbMsgBoxResult
-    'ErrHandler = GlobalErrHandler(Me, PrcName, AddInfo, BolLoud, bErrLog, vbDecor)
+    
     If bRetry Then
+        
         ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, bErrLog)
+        
     Else
+        
         ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, BolLoud, bErrLog, vbDecor)
+        
     End If
+    
 End Function
 
 

@@ -13,8 +13,6 @@ Public Function MessError(ClsName As String, FncName As String, _
                "in:     " & ClsName & "::" & FncName & vbCrLf & _
                "Info:   " & Err.Description & vbCrLf & AddInfo
         MessError = MsgBox(sErr, vbDecor)
-        'On Error GoTo 0
-        'Err.Clear
     End If
     If bErrLog Then
         ErrLog = ErrLog & vbCrLf & Now & " " & sErr

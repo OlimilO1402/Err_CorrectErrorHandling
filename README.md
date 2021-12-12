@@ -18,6 +18,8 @@ ErrHandler:
 ```
 
 and most of the time they end up having plenty of MsgBoxes, doing similar things, spreaded all over the code.
+During an error the user often is in a kind of shock-situation
+so don't be rude and give informations what is to do now!
 
 In Error-Messages the following Informations are badly needed:
  * the name of the class where the error occurs
