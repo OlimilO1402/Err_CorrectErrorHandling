@@ -10,6 +10,14 @@ Begin VB.Form FMain
    ScaleHeight     =   3015
    ScaleWidth      =   7215
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnProvokeWinApiError 
+      Caption         =   "Provoke WinApi Error"
+      Height          =   495
+      Left            =   5040
+      TabIndex        =   8
+      Top             =   1680
+      Width           =   1935
+   End
    Begin VB.CommandButton BtnInfo 
       Caption         =   "Info"
       Height          =   495
@@ -93,6 +101,16 @@ Private Sub BtnInfo_Click()
     
 End Sub
 
+Private Sub BtnProvokeWinApiError_Click()
+Try: On Error GoTo Catch
+    Dim hr As Long: hr = RegOpenKeyExA(0, 0, 0, 0, 0)
+    If hr <> 0 Then GoTo Catch
+    GoTo Finally
+Catch:
+    MErr.MessError TypeName(Me), "BtnProvokeWinApiError_Click", "Trying to access registry", hr
+Finally:
+End Sub
+
 Private Sub Form_Load()
     
     'for showing correct error handling we first have to provoke an error
@@ -116,7 +134,7 @@ Try: On Error GoTo Catch
     GoTo Finally
 Catch:
 
-    If ErrHandler("BtnFileOpen1_Click", , , , , True) = vbRetry Then Resume Try
+    If ErrHandler("BtnFileOpen1_Click", , , , , , True) = vbRetry Then Resume Try
     
 Finally:
 
@@ -228,18 +246,19 @@ End Function
 ' v ############################## v '   Local ErrHandler   ' v ############################## v '
 Private Function ErrHandler(ByVal FuncName As String, _
                             Optional AddInfo As String, _
-                            Optional BolLoud As Boolean = True, _
+                            Optional WinApiErr As Long = 0, _
+                            Optional bLoud As Boolean = True, _
                             Optional bErrLog As Boolean = True, _
                             Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
                             Optional bRetry As Boolean) As VbMsgBoxResult
     
     If bRetry Then
         
-        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, bErrLog)
+        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, WinApiErr, bErrLog)
         
     Else
         
-        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, BolLoud, bErrLog, vbDecor)
+        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, WinApiErr, bLoud, bErrLog, vbDecor)
         
     End If
     
