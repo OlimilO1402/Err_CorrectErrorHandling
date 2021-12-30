@@ -19,12 +19,15 @@ Private Const FORMAT_MESSAGE_ARGUMENT_ARRAY  As Long = &H2000
 #End If
 Public ErrLog As String
 
-'OK, bei Inline-Fehlern die z.B. von WinAPI-Funktionen über HResult zurückgegeben werden, ist das hier noch etwas Schwach
-'OK für Fehlernummer 4 verschiedene Möglichkeiten
-'* Err.Number
-'* Err.LastDllError
-'* GetLastError
-'* HResult
+'here 4 different ways to get the error-code and 2 different
+'ways to translate the error-code to a human readable string
+' * VBC-Runtime:
+'     a) Err.Number       -> Err.Description
+'     b) Err.LastDllError -> Err.Description
+' * Windows-API:
+'     c) GetLastError (~=Err.LastDllError) -> FormatMessage
+'     d) HResult or any other WinaPI-Error -> FormatMessage
+
 Public Function MessError(ClsName As String, FncName As String, _
                           Optional AddInfo As String = "", _
                           Optional WinApiErr, _
@@ -57,7 +60,7 @@ End Function
 
 Public Function WinApiError_ToStr(ByVal MessageID As Long) As String
     'MessageID e.g. hResult
-    Dim l As Long:   l = 256
+    Dim l As Long:   l = 512
     Dim s As String: s = Space(l)
     l = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM Or FORMAT_MESSAGE_IGNORE_INSERTS, 0&, MessageID, 0&, StrPtr(s), l, ByVal 0&)
     If l Then WinApiError_ToStr = Left$(s, l)

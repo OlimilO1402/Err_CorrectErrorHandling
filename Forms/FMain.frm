@@ -1,85 +1,94 @@
 VERSION 5.00
 Begin VB.Form FMain 
    Caption         =   "Form1"
-   ClientHeight    =   3015
+   ClientHeight    =   2295
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   7215
+   ClientWidth     =   6975
+   BeginProperty Font 
+      Name            =   "Tahoma"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3015
-   ScaleWidth      =   7215
+   ScaleHeight     =   2295
+   ScaleWidth      =   6975
    StartUpPosition =   3  'Windows-Standard
    Begin VB.CommandButton BtnProvokeWinApiError 
       Caption         =   "Provoke WinApi Error"
-      Height          =   495
-      Left            =   5040
+      Height          =   375
+      Left            =   4920
       TabIndex        =   8
-      Top             =   1680
+      Top             =   1080
       Width           =   1935
    End
    Begin VB.CommandButton BtnInfo 
       Caption         =   "Info"
-      Height          =   495
-      Left            =   5040
+      Height          =   375
+      Left            =   4920
       TabIndex        =   7
-      Top             =   840
+      Top             =   600
       Width           =   1935
    End
    Begin VB.TextBox Text2 
       Height          =   1095
-      Left            =   2640
+      Left            =   2520
       MultiLine       =   -1  'True
       TabIndex        =   6
-      Top             =   1440
+      Top             =   1080
       Width           =   2295
    End
    Begin VB.TextBox Text1 
       Height          =   1095
-      Left            =   240
+      Left            =   120
       MultiLine       =   -1  'True
       TabIndex        =   5
-      Top             =   1440
+      Top             =   1080
       Width           =   2295
    End
    Begin VB.CommandButton BtnStartExe 
       Caption         =   "Start Exe"
-      Height          =   495
-      Left            =   5040
+      Height          =   375
+      Left            =   4920
       TabIndex        =   4
-      Top             =   240
+      Top             =   120
       Width           =   1935
    End
    Begin VB.CommandButton BtnFileClose2 
       Caption         =   "File Close"
-      Height          =   495
-      Left            =   2640
+      Height          =   375
+      Left            =   2520
       TabIndex        =   3
-      Top             =   840
+      Top             =   600
       Width           =   1935
    End
    Begin VB.CommandButton BtnFileOpen2 
       Caption         =   "File Open"
-      Height          =   495
-      Left            =   2640
+      Height          =   375
+      Left            =   2520
       TabIndex        =   2
-      Top             =   240
+      Top             =   120
       Width           =   1935
    End
    Begin VB.CommandButton BtnFileClose1 
       Caption         =   "File Close"
-      Height          =   495
-      Left            =   240
+      Height          =   375
+      Left            =   120
       TabIndex        =   1
-      Top             =   840
+      Top             =   600
       Width           =   1935
    End
    Begin VB.CommandButton BtnFileOpen1 
       Caption         =   "File Open"
-      Height          =   495
-      Left            =   240
+      Height          =   375
+      Left            =   120
       TabIndex        =   0
-      Top             =   240
+      Top             =   120
       Width           =   1935
    End
 End
@@ -94,6 +103,9 @@ Private m_FNr1 As Integer
 Private m_FNr2 As Integer
 
 Private m_File As PathFileName
+
+Private Declare Function RegOpenKeyExA Lib "advapi32" ( _
+    ByVal hKey As Long, ByVal lpSubKey As String, ByVal ulOptions As Long, ByVal samDesired As Long, phkResult As Long) As Long
 
 Private Sub BtnInfo_Click()
     
@@ -117,7 +129,7 @@ End Sub
 
 Private Sub Form_Load()
     
-    'for showing correct error handling we first have to provoke an error
+    'for being able to show correct error handling we have to provoke an error at first.
     m_PFN = App.Path & "\testfile.txt"
     Set m_File = New PathFileName: m_File.PFN = m_PFN
     Me.BtnFileClose1.Enabled = False
@@ -197,7 +209,6 @@ End Sub
 
 'we could easily solve the task by using a globally available standard error message
 'so lets do a module for our error messages (see module "MErr")
-
 
 'in VB.net we have the Try..Catch..Finally-syntax
 'this is very useful because we have a standard syntax always for the same thing
