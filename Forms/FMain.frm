@@ -123,7 +123,7 @@ Try: On Error GoTo Catch
     
     GoTo Finally
 Catch:
-    MErr.MessError TypeName(Me), "BtnProvokeWinApiError_Click", "Trying to access registry", hr
+    ErrHandler "BtnProvokeWinApiError_Click", "Trying to access registry", hr
 Finally:
 End Sub
 
@@ -234,7 +234,7 @@ Catch:
     'call the ErrHandler function, which can be private in every class, form or module
     'add the information: "name of the function", the name of the class or form is known
     'you even have the chance to call the function more times
-    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then Resume Try
+    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , , True) = vbRetry Then Resume Try
 
 Finally:
 End Function
@@ -251,7 +251,7 @@ Try: On Error GoTo Catch
     
     GoTo Finally
 Catch:
-    ErrHandler "ReadContent"
+    ErrHandler "ReadContent", , , , , , True
 Finally:
 End Function
 
@@ -264,7 +264,7 @@ Private Function ErrHandler(ByVal FuncName As String, _
                             Optional WinApiError, _
                             Optional bLoud As Boolean = True, _
                             Optional bErrLog As Boolean = True, _
-                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
+                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly, _
                             Optional bRetry As Boolean) As VbMsgBoxResult
     
     If bRetry Then

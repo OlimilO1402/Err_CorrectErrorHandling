@@ -33,7 +33,7 @@ Try: On Error GoTo Catch
     GoTo Finally
 Catch:
     
-    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , True) = vbRetry Then Resume Try
+    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , , True) = vbRetry Then Resume Try
 
 Finally:
     
@@ -56,7 +56,7 @@ Try: On Error GoTo Catch
     GoTo Finally
 Catch:
     
-    If ErrHandler("ReadContent", , , , , True) = vbRetry Then Resume Try
+    If ErrHandler("ReadContent", , , , , , True) = vbRetry Then Resume Try
     
 Finally:
     
@@ -77,7 +77,7 @@ Private Function ErrHandler(ByVal FuncName As String, _
                             Optional WinApiErr, _
                             Optional BolLoud As Boolean = True, _
                             Optional bErrLog As Boolean = True, _
-                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
+                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly, _
                             Optional bRetry As Boolean) As VbMsgBoxResult
     
     If bRetry Then
