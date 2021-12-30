@@ -27,7 +27,7 @@ Public ErrLog As String
 '* HResult
 Public Function MessError(ClsName As String, FncName As String, _
                           Optional AddInfo As String = "", _
-                          Optional WinApiErr As Long = 0, _
+                          Optional WinApiErr, _
                           Optional bLoud As Boolean = True, _
                           Optional bErrLog As Boolean = True, _
                           Optional vbDecor As VbMsgBoxStyle = vbOKOnly) As VbMsgBoxResult ' vbOKOnly Or vbCritical
@@ -39,7 +39,7 @@ Public Function MessError(ClsName As String, FncName As String, _
         If Err.LastDllError Then sErr = sErr & vbCrLf & "DllErrNr: " & Err.LastDllError & " " & Err.Description
         Dim LastError As Long: LastError = GetLastError
         If LastError Then sErr = sErr & vbCrLf & "LastError " & LastError & ": " & WinApiError_ToStr(LastError)
-        If WinApiErr Then sErr = sErr & vbCrLf & "WinApiErr " & WinApiErr & ": " & WinApiError_ToStr(WinApiErr)
+        If Not IsMissing(WinApiErr) Then sErr = sErr & vbCrLf & "WinApiErr " & WinApiErr & ": " & WinApiError_ToStr(WinApiErr)
         
         MessError = MsgBox(sErr, vbDecor)
     End If
@@ -50,9 +50,9 @@ End Function
 
 Public Function MessErrorRetry(ClsName As String, FncName As String, _
                                Optional AddInfo As String = "", _
-                               Optional WinApiErr As Long = 0, _
+                               Optional WinApiErr, _
                                Optional bErrLog As Boolean = True) As VbMsgBoxResult
-    MessErrorRetry = MessError(ClsName, FncName, AddInfo, True, bErrLog, vbRetryCancel)
+    MessErrorRetry = MessError(ClsName, FncName, AddInfo, WinApiErr, True, bErrLog, vbRetryCancel)
 End Function
 
 Public Function WinApiError_ToStr(ByVal MessageID As Long) As String

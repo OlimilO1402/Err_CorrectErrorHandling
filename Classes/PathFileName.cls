@@ -74,6 +74,7 @@ End Sub
 ' v ############################## v '   Local ErrHandler   ' v ############################## v '
 Private Function ErrHandler(ByVal FuncName As String, _
                             Optional AddInfo As String, _
+                            Optional WinApiErr, _
                             Optional BolLoud As Boolean = True, _
                             Optional bErrLog As Boolean = True, _
                             Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
@@ -81,11 +82,11 @@ Private Function ErrHandler(ByVal FuncName As String, _
     
     If bRetry Then
         
-        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, bErrLog)
+        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, WinApiErr, bErrLog)
         
     Else
         
-        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, BolLoud, bErrLog, vbDecor)
+        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, WinApiErr, BolLoud, bErrLog, vbDecor)
         
     End If
     

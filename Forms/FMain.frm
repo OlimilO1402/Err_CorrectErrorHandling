@@ -102,9 +102,13 @@ Private Sub BtnInfo_Click()
 End Sub
 
 Private Sub BtnProvokeWinApiError_Click()
+    
 Try: On Error GoTo Catch
+    
     Dim hr As Long: hr = RegOpenKeyExA(0, 0, 0, 0, 0)
+    
     If hr <> 0 Then GoTo Catch
+    
     GoTo Finally
 Catch:
     MErr.MessError TypeName(Me), "BtnProvokeWinApiError_Click", "Trying to access registry", hr
@@ -246,7 +250,7 @@ End Function
 ' v ############################## v '   Local ErrHandler   ' v ############################## v '
 Private Function ErrHandler(ByVal FuncName As String, _
                             Optional AddInfo As String, _
-                            Optional WinApiErr As Long = 0, _
+                            Optional WinApiError, _
                             Optional bLoud As Boolean = True, _
                             Optional bErrLog As Boolean = True, _
                             Optional vbDecor As VbMsgBoxStyle = vbOKOnly Or vbCritical, _
@@ -254,11 +258,11 @@ Private Function ErrHandler(ByVal FuncName As String, _
     
     If bRetry Then
         
-        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, WinApiErr, bErrLog)
+        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, WinApiError, bErrLog)
         
     Else
         
-        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, WinApiErr, bLoud, bErrLog, vbDecor)
+        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, WinApiError, bLoud, bErrLog, vbDecor)
         
     End If
     
