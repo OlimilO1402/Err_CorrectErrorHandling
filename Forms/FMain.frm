@@ -251,7 +251,7 @@ Try: On Error GoTo Catch
     
     GoTo Finally
 Catch:
-    ErrHandler "ReadContent", , , , , , True
+    If ErrHandler("ReadContent", , , , , , True) = vbRetry Then Resume Try
 Finally:
 End Function
 
