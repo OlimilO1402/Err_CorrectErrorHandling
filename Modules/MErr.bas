@@ -1,5 +1,5 @@
 Attribute VB_Name = "MErr"
-Option Explicit
+Option Explicit ' Zeilen: 91
 Private Const FORMAT_MESSAGE_MAX_WIDTH_MASK  As Long = &HFF&
 Private Const FORMAT_MESSAGE_ALLOCATE_BUFFER As Long = &H100
 Private Const FORMAT_MESSAGE_IGNORE_INSERTS  As Long = &H200
@@ -66,3 +66,26 @@ Public Function WinApiError_ToStr(ByVal MessageID As Long) As String
     If l Then WinApiError_ToStr = Left$(s, l)
 End Function
 
+''copy this same function to every class or form
+''the name of the class or form will be added automatically
+''in standard-modules the function "TypeName(Me)" will not work, so simply replace it with the name of the Module
+'' v ############################## v '   Local ErrHandler   ' v ############################## v '
+'Private Function ErrHandler(ByVal FuncName As String, _
+'                            Optional AddInfo As String, _
+'                            Optional WinApiError, _
+'                            Optional bLoud As Boolean = True, _
+'                            Optional bErrLog As Boolean = True, _
+'                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly, _
+'                            Optional bRetry As Boolean) As VbMsgBoxResult
+'
+'    If bRetry Then
+'
+'        ErrHandler = MessErrorRetry(TypeName(Me), FuncName, AddInfo, WinApiError, bErrLog)
+'
+'    Else
+'
+'        ErrHandler = MessError(TypeName(Me), FuncName, AddInfo, WinApiError, bLoud, bErrLog, vbDecor)
+'
+'    End If
+'
+'End Function
