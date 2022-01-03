@@ -39,7 +39,7 @@ Public Function MessError(ClsName As String, FncName As String, _
         Dim sErr As String:  sErr = ClsName & "::" & FncName
         If Len(AddInfo) Then sErr = sErr & vbCrLf & "Info:   " & AddInfo
         If Err.Number Then sErr = sErr & vbCrLf & "ErrNr " & Err.Number & ": " & Err.Description
-        If Err.LastDllError Then sErr = sErr & vbCrLf & "DllErrNr: " & Err.LastDllError & " " & Err.Description
+        If Err.LastDllError Then sErr = sErr & vbCrLf & "DllErrNr: " & Err.LastDllError & ": " & WinApiError_ToStr(Err.LastDllError) '& Err.Description
         Dim LastError As Long: LastError = GetLastError
         If LastError Then sErr = sErr & vbCrLf & "LastError " & LastError & ": " & WinApiError_ToStr(LastError)
         If Not IsMissing(WinApiErr) Then sErr = sErr & vbCrLf & "WinApiErr " & WinApiErr & ": " & WinApiError_ToStr(WinApiErr)
