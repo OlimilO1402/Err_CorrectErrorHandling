@@ -41,7 +41,7 @@ So let's use a module for our error messages (like module "MErr")
 In VB.net there is the Try..Catch..Finally-syntax.
 This is very useful because we have a standard syntax always for the same thing
 
-But don't hesitate we can do it in VBC very similiar like this:
+But don't hesitate we can do it in VBC very similar like this:
 ```vba
 Sub DoIt()
 Try: On Error GoTo Catch
