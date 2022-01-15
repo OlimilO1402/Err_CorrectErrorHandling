@@ -190,4 +190,8 @@ Public Function WinApiError_ToStr(ByVal MessageID As Long) As String
 End Function
 ```
 
+For a further reading I would recommend this blogpost by Gunnar Morling:  
+[What's in a Good Error Message?](https://www.morling.dev/blog/whats-in-a-good-error-message/)
+
+
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")
