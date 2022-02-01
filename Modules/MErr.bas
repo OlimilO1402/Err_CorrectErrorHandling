@@ -11,9 +11,9 @@ Private Const FORMAT_MESSAGE_ARGUMENT_ARRAY  As Long = &H2000
     Private Declare PtrSafe Function GetLastError Lib "kernel32" () As Long
     Private Declare PtrSafe Function FormatMessageW Lib "kernel32.dll" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As LongPtr, ByVal nSize As Long, ByRef Arguments As Long) As Long
 #Else
-    Public Enum LongPtr
-        [_]
-    End Enum
+    'Public Enum LongPtr
+    '    [_]
+    'End Enum
     Private Declare Function GetLastError Lib "kernel32" () As Long
     Private Declare Function FormatMessageW Lib "kernel32.dll" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As LongPtr, ByVal nSize As Long, ByRef Arguments As Long) As Long
 #End If
@@ -60,13 +60,13 @@ End Function
 
 Public Function WinApiError_ToStr(ByVal MessageID As Long) As String
     'MessageID e.g. hResult
-    Dim l As Long:   l = 512
-    Dim s As String: s = Space(l)
-    l = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM Or FORMAT_MESSAGE_IGNORE_INSERTS, 0&, MessageID, 0&, StrPtr(s), l, ByVal 0&)
-    If l Then WinApiError_ToStr = Left$(s, l)
+    Dim L As Long:   L = 512
+    Dim s As String: s = Space(L)
+    L = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM Or FORMAT_MESSAGE_IGNORE_INSERTS, 0&, MessageID, 0&, StrPtr(s), L, ByVal 0&)
+    If L Then WinApiError_ToStr = Left$(s, L)
 End Function
 
-''copy this same function to every class or form
+''copy this same function to every class, form or module
 ''the name of the class or form will be added automatically
 ''in standard-modules the function "TypeName(Me)" will not work, so simply replace it with the name of the Module
 '' v ############################## v '   Local ErrHandler   ' v ############################## v '
