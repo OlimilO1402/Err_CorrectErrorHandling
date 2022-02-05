@@ -33,7 +33,7 @@ Public Function MessError(ClsName As String, FncName As String, _
                           Optional WinApiErr, _
                           Optional bLoud As Boolean = True, _
                           Optional bErrLog As Boolean = True, _
-                          Optional vbDecor As VbMsgBoxStyle = vbOKOnly) As VbMsgBoxResult ' vbOKOnly Or vbCritical
+                          Optional vbDecor As VbMsgBoxStyle = vbOKCancel) As VbMsgBoxResult ' vbOKOnly Or vbCritical
     If bLoud Then
 
         Dim sErr As String:  sErr = ClsName & "::" & FncName
@@ -71,11 +71,11 @@ End Function
 ''in standard-modules the function "TypeName(Me)" will not work, so simply replace it with the name of the Module
 '' v ############################## v '   Local ErrHandler   ' v ############################## v '
 'Private Function ErrHandler(ByVal FuncName As String, _
-'                            Optional AddInfo As String, _
+'                            Optional ByVal AddInfo As String, _
 '                            Optional WinApiError, _
 '                            Optional bLoud As Boolean = True, _
 '                            Optional bErrLog As Boolean = True, _
-'                            Optional vbDecor As VbMsgBoxStyle = vbOKOnly, _
+'                            Optional vbDecor As VbMsgBoxStyle = vbOKCancel, _
 '                            Optional bRetry As Boolean) As VbMsgBoxResult
 '
 '    If bRetry Then
