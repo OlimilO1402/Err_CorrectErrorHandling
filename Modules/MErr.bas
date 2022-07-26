@@ -1,4 +1,7 @@
 Attribute VB_Name = "MErr"
+
+
+
 Option Explicit ' Zeilen: 91
 Private Const FORMAT_MESSAGE_MAX_WIDTH_MASK  As Long = &HFF&
 Private Const FORMAT_MESSAGE_ALLOCATE_BUFFER As Long = &H100
