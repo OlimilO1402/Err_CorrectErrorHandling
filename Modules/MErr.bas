@@ -1,7 +1,4 @@
 Attribute VB_Name = "MErr"
-
-
-
 Option Explicit ' Zeilen: 91
 Private Const FORMAT_MESSAGE_MAX_WIDTH_MASK  As Long = &HFF&
 Private Const FORMAT_MESSAGE_ALLOCATE_BUFFER As Long = &H100
@@ -18,7 +15,7 @@ Private Const FORMAT_MESSAGE_ARGUMENT_ARRAY  As Long = &H2000
     '    [_]
     'End Enum
     Private Declare Function GetLastError Lib "kernel32" () As Long
-    Private Declare Function FormatMessageW Lib "kernel32.dll" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As LongPtr, ByVal nSize As Long, ByRef Arguments As Long) As Long
+    Private Declare Function FormatMessageW Lib "kernel32.dll" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As Any, ByVal nSize As Long, ByRef Arguments As Long) As Long
 #End If
 Public ErrLog As String
 
