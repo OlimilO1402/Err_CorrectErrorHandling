@@ -1,10 +1,10 @@
 Type=Exe
-Form=Forms\FMain.frm
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINDOWS\SysWow64\stdole2.tlb#OLE Automation
+Form=Forms\FMain.frm
 Module=MErr; Modules\MErr.bas
-Class=PathFileName; Classes\PathFileName.cls
 Module=MApp; Modules\MApp.bas
 Module=MPtr; ..\Ptr_Pointers\Modules\MPtr.bas
+Class=PathFileName; Classes\PathFileName.cls
 ResFile32="Resources\MyRes.res"
 IconForm="FMain"
 Startup="Sub Main"
