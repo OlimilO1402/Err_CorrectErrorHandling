@@ -9,13 +9,13 @@ Private Const FORMAT_MESSAGE_FROM_SYSTEM     As Long = &H1000
 Private Const FORMAT_MESSAGE_ARGUMENT_ARRAY  As Long = &H2000
 #If VBA7 Then
     Private Declare PtrSafe Function GetLastError Lib "kernel32" () As Long
-    Private Declare PtrSafe Function FormatMessageW Lib "kernel32.dll" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As LongPtr, ByVal nSize As Long, ByRef Arguments As Long) As Long
+    Private Declare PtrSafe Function FormatMessageW Lib "kernel32" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As LongPtr, ByVal nSize As Long, ByRef Arguments As Long) As Long
 #Else
     'Public Enum LongPtr
     '    [_]
     'End Enum
     Private Declare Function GetLastError Lib "kernel32" () As Long
-    Private Declare Function FormatMessageW Lib "kernel32.dll" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As Any, ByVal nSize As Long, ByRef Arguments As Long) As Long
+    Private Declare Function FormatMessageW Lib "kernel32" (ByVal dwFlags As Long, ByRef lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As Any, ByVal nSize As Long, ByRef Arguments As Long) As Long
 #End If
 Public ErrLog As String
 
