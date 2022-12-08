@@ -43,7 +43,7 @@ Public Function MessError(ClsName As String, FncName As String, _
         Dim LastError As Long: LastError = GetLastError
         If LastError Then sErr = sErr & vbCrLf & "LastError " & LastError & ": " & WinApiError_ToStr(LastError)
         If Not IsMissing(WinApiErr) Then
-            If VarType(WinApiErr) = vbBoolean And WinApiErr = True Then
+            If VarType(WinApiErr) = VbVarType.vbBoolean And WinApiErr = True Then
                 WinApiErr = GetLastError
             End If
             sErr = sErr & vbCrLf & "WinApiErr " & WinApiErr & ": " & WinApiError_ToStr(WinApiErr)
