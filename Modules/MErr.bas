@@ -73,7 +73,7 @@ End Function
 ''copy this same function to every class, form or module
 ''the name of the class or form will be added automatically
 ''in standard-modules the function "TypeName(Me)" will not work, so simply replace it with the name of the Module
-'' v ############################## v '   Local ErrHandler   ' v ############################## v '
+'' v #################### v '     Local ErrHandler      ' v #################### v '
 'Private Function ErrHandler(ByVal FuncName As String, _
 '                            Optional ByVal AddInfo As String, _
 '                            Optional WinApiError, _
