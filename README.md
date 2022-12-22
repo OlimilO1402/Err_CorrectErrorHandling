@@ -11,7 +11,7 @@ Project started around may 2005.
 ### General
 
 In VBC we often see code similar to the following
-```vba
+```Visual Basic 6.0
     On Error GoTo ErrHandler
     '. . . some error-prone code here . . .
     Exit Sub/Function/Property
@@ -19,7 +19,7 @@ ErrHandler:
     MsgBox Err.Description
 ```
 
-and most of the time they end up having plenty of MsgBoxes, doing similar things, spreaded all 
+and most of the time they end up having plenty of MsgBoxes, doing similar things, spread all 
 over the code. During an error the user often is in a kind of shock-situation so don't be rude 
 and give informations what is to do now!
 
@@ -42,7 +42,7 @@ In VB.net there is the Try..Catch..Finally-syntax.
 This is very useful because we have a standard syntax always for the same thing
 
 But don't hesitate we can do it in VBC very similar like this:
-```vba
+```Visual Basic 6.0
 Sub DoIt()
 Try: On Error GoTo Catch
     
