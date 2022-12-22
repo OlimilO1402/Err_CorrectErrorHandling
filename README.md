@@ -11,7 +11,7 @@ Project started around may 2005.
 ### General
 
 In VBC we often see code similar to the following
-```Visual Basic 6.0
+```VBA
     On Error GoTo ErrHandler
     '. . . some error-prone code here . . .
     Exit Sub/Function/Property
@@ -25,13 +25,13 @@ and give informations what is to do now!
 
 ### Informations Needed
 
-In Error-Messages the following Informations are badly needed:
+In error messages the following informations are badly needed:
  * the name of the class where the error occurs
  * the name of the function where the error occurs
  * some additional information about the specific object, the filename etc.
  * what the user could do next
  * how to avoid the error in the future
-not only for the user but also for you the developer.
+not only for the user but also for you, the developer.
 
 We could easily solve the task by using a globally available standard error message.
 So let's use a module for our error messages (like module "MErr")
@@ -42,7 +42,7 @@ In VB.net there is the Try..Catch..Finally-syntax.
 This is very useful because we have a standard syntax always for the same thing
 
 But don't hesitate we can do it in VBC very similar like this:
-```Visual Basic 6.0
+```VBA
 Sub DoIt()
 Try: On Error GoTo Catch
     
@@ -50,14 +50,16 @@ Try: On Error GoTo Catch
 	
 	GoTo Finally
 Catch:
-'. . .
+    'Show a proper error-message
 Finally:
+    'Dispose handles in every case
 End Sub
 ```
 
-Instead of "GoTo Finally" you could also use "Exit Sub", "Exit Function" or "Exit Property",
-but using "Goto Finally" instead is more generic, because you even do not have to distinguish 
-between Sub, Function or Property, so reusing the code is made more easily.
+Instead of "GoTo Finally" you could also use "Exit Sub", "Exit Function" or "Exit Property", 
+at least if we do not have to free any handles, but using "Goto Finally" instead is more 
+generic, because you even do not have to distinguish between Sub, Function or Property, so 
+reusing the code is made more easily.
 
 Now call the ErrHandler function, which can be private in every class, form or module.
 Add the information: "name of the function", VB already knows the name of the class or form.
