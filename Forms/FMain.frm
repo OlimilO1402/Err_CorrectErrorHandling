@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form FMain 
    Caption         =   "Form1"
-   ClientHeight    =   2295
+   ClientHeight    =   3630
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   6975
@@ -16,15 +16,23 @@ Begin VB.Form FMain
    EndProperty
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   2295
+   ScaleHeight     =   3630
    ScaleWidth      =   6975
    StartUpPosition =   3  'Windows-Standard
-   Begin VB.CommandButton Command1 
-      Caption         =   "Command1"
+   Begin VB.CommandButton Command2 
+      Caption         =   "Nesting 2"
       Height          =   375
-      Left            =   4920
+      Left            =   2520
+      TabIndex        =   10
+      Top             =   2400
+      Width           =   1935
+   End
+   Begin VB.CommandButton Command1 
+      Caption         =   "Nesting 1"
+      Height          =   375
+      Left            =   120
       TabIndex        =   9
-      Top             =   1560
+      Top             =   2400
       Width           =   1935
    End
    Begin VB.CommandButton BtnProvokeWinApiError 
@@ -115,6 +123,17 @@ Private m_File As PathFileName
 Private Declare Function RegOpenKeyExA Lib "advapi32" ( _
     ByVal hKey As Long, ByVal lpSubKey As String, ByVal ulOptions As Long, ByVal samDesired As Long, phkResult As Long) As Long
 
+Private Sub Form_Load()
+    
+    'for being able to show correct error handling we have to provoke an error at first.
+    m_PFN = App.Path & "\testfile.txt"
+    Set m_File = New PathFileName: m_File.PFN = m_PFN
+    Me.BtnFileClose1.Enabled = False
+    Me.BtnFileClose2.Enabled = False
+    
+End Sub
+
+
 Private Sub BtnInfo_Click()
     
     MsgBox App.CompanyName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation
@@ -135,15 +154,56 @@ Catch:
 Finally:
 End Sub
 
-Private Sub Form_Load()
-    
-    'for being able to show correct error handling we have to provoke an error at first.
-    m_PFN = App.Path & "\testfile.txt"
-    Set m_File = New PathFileName: m_File.PFN = m_PFN
-    Me.BtnFileClose1.Enabled = False
-    Me.BtnFileClose2.Enabled = False
-    
+' v ############################## v '    Code Nesting    ' v ############################## v '
+Private Sub Command1_Click()
+    Dim i As Long: i = 1
+    Dim j As Long: j = 0
+Try1: On Error GoTo Catch1
+    'i = i / j
+Try2:   On Error GoTo Catch2
+        i = i / j
+        GoTo Finally2
+Catch2:
+        MsgBox "Catch2"
+Finally2:
+        MsgBox "Finally2"
+End_Try2:
+    GoTo Finally1
+Catch1:
+    MsgBox "Catch1"
+Finally1:
+    MsgBox "Finally1"
+End_Try1:
 End Sub
+'Result:
+'Catch2
+'Finally2
+'Finally1
+
+Private Sub Command2_Click()
+    Dim i As Long: i = 1
+    Dim j As Long: j = 0
+Try1: On Error GoTo Catch1
+    i = i / j
+Try2:   On Error GoTo Catch2
+        i = i / j
+        GoTo Finally2
+Catch2:
+        MsgBox "Catch2"
+Finally2:
+        MsgBox "Finally2"
+End_Try2:
+    GoTo Finally1
+Catch1:
+    MsgBox "Catch1"
+Finally1:
+    MsgBox "Finally1"
+End_Try1:
+End Sub
+'Result:
+'Catch1
+'Finally1
+' ^ ############################## ^ '    Code Nesting    ' ^ ############################## ^ '
 
 Private Sub BtnFileOpen1_Click()
     

@@ -196,11 +196,11 @@ End Function
 For a further reading I would recommend this blogpost by Gunnar Morling:  
 [What's in a Good Error Message?](https://www.morling.dev/blog/whats-in-a-good-error-message/)
 
-### When Does The Error Occur
+### Code Nesting
 
-Up to now we assume the error occurs in the "Try-block". But of course unfortunately it can also occur in the "Catch-" or "Finally-block".
-In other languages like VB.net you are able to nest a different Try-Catch-Finally inside the upper Try-Catch-Finally and so on. 
+In other languages like VB.net we are able to nest a different Try-Catch-Finally inside the upper Try-Catch-Finally and so on. 
 VB.net-code:
+
 ```vba
 Private Async Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 	Dim i As Integer = 1
@@ -223,7 +223,7 @@ End Sub
 ```
 
 Though it looks like hell, we could do this in VBA as well, if you do so U GoTo HELL anyway.
-So I would recommend not to do this, but if you ask for it, OK here is it.
+So I would recommend not to do this, but if you ask for it, OK there your are:
 
 ```vba
 Private Sub Command1_Click()
@@ -275,6 +275,16 @@ End Sub
 'Catch1
 'Finally1
 ```
+
+links:
+
+* [YouTube: CodeAesthetic "Why You Shouldn't Nest Your Code"](https://www.youtube.com/watch?v=CFRhGnuXG-4)
+* [Repo: Langg_AvoidElse](https://github.com/OlimilO1402/Langg_AvoidElse)
+
+
+### When Does The Error Occur
+
+Up to now we assume the error occurs in the "Try-block". But of course unfortunately it can also occur in the "Catch-" or "Finally-block".
 
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")
