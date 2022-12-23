@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form FMain 
-   Caption         =   "Form1"
-   ClientHeight    =   3630
+   Caption         =   "Error-Handling"
+   ClientHeight    =   3975
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   6975
@@ -16,26 +16,42 @@ Begin VB.Form FMain
    EndProperty
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3630
+   ScaleHeight     =   3975
    ScaleWidth      =   6975
    StartUpPosition =   3  'Windows-Standard
-   Begin VB.CommandButton Command4 
-      Caption         =   "Error in Try and Finally"
+   Begin VB.CommandButton BtnCompleteGuard2 
+      Caption         =   "Error only in Try"
       Height          =   375
       Left            =   2520
-      TabIndex        =   12
-      Top             =   2880
+      TabIndex        =   14
+      Top             =   3000
       Width           =   1935
    End
-   Begin VB.CommandButton Command3 
-      Caption         =   "Error only in Finally"
+   Begin VB.CommandButton BtnCompleteGuard1 
+      Caption         =   "No Error at all"
       Height          =   375
       Left            =   120
-      TabIndex        =   11
-      Top             =   2880
+      TabIndex        =   13
+      Top             =   3000
       Width           =   1935
    End
-   Begin VB.CommandButton Command2 
+   Begin VB.CommandButton BtnCompleteGuard3 
+      Caption         =   "Error in Try and Finally"
+      Height          =   375
+      Left            =   120
+      TabIndex        =   12
+      Top             =   3480
+      Width           =   1935
+   End
+   Begin VB.CommandButton BtnCompleteGuard4 
+      Caption         =   "Error only in Finally"
+      Height          =   375
+      Left            =   2520
+      TabIndex        =   11
+      Top             =   3480
+      Width           =   1935
+   End
+   Begin VB.CommandButton BtnNesting2 
       Caption         =   "Nesting 2"
       Height          =   375
       Left            =   2520
@@ -43,7 +59,7 @@ Begin VB.Form FMain
       Top             =   2400
       Width           =   1935
    End
-   Begin VB.CommandButton Command1 
+   Begin VB.CommandButton BtnNesting1 
       Caption         =   "Nesting 1"
       Height          =   375
       Left            =   120
@@ -140,7 +156,8 @@ Private Declare Function RegOpenKeyExA Lib "advapi32" ( _
     ByVal hKey As Long, ByVal lpSubKey As String, ByVal ulOptions As Long, ByVal samDesired As Long, phkResult As Long) As Long
 
 Private Sub Form_Load()
-    
+        
+    Me.Caption = Me.Caption & " v" & App.Major & "." & App.Minor & "." & App.Revision
     'for being able to show correct error handling we have to provoke an error at first.
     m_PFN = App.Path & "\testfile.txt"
     Set m_File = New PathFileName: m_File.PFN = m_PFN
@@ -169,104 +186,6 @@ Catch:
     ErrHandler "BtnProvokeWinApiError_Click", "Trying to access registry", hr
 Finally:
 End Sub
-
-' v ############################## v '    Code Nesting    ' v ############################## v '
-Private Sub Command1_Click()
-    Dim i As Long: i = 1
-    Dim j As Long: j = 0
-Try1: On Error GoTo Catch1
-    'i = i / j
-Try2:   On Error GoTo Catch2
-        i = i / j
-        GoTo Finally2
-Catch2:
-        MsgBox "Catch2"
-Finally2:
-        MsgBox "Finally2"
-End_Try2:
-    GoTo Finally1
-Catch1:
-    MsgBox "Catch1"
-Finally1:
-    MsgBox "Finally1"
-End_Try1:
-End Sub
-'Result:
-'Catch2
-'Finally2
-'Finally1
-
-Private Sub Command2_Click()
-    Dim i As Long: i = 1
-    Dim j As Long: j = 0
-Try1: On Error GoTo Catch1
-    i = i / j
-Try2:   On Error GoTo Catch2
-        i = i / j
-        GoTo Finally2
-Catch2:
-        MsgBox "Catch2"
-Finally2:
-        MsgBox "Finally2"
-End_Try2:
-    GoTo Finally1
-Catch1:
-    MsgBox "Catch1"
-Finally1:
-    MsgBox "Finally1"
-End_Try1:
-End Sub
-'Result:
-'Catch1
-'Finally1
-' ^ ############################## ^ '    Code Nesting    ' ^ ############################## ^ '
-
-' v ############################## v '  Error in Finally  ' v ############################## v '
-Private Sub Command3_Click()
-    'Error will occur only in the Finally-block
-Try: On Error GoTo Catch
-    Dim PFN As PathFileName
-    'Set PFN = New PathFileName 'Upps we forgot to create the object
-    'PFN.OOpen ' we do not try use any function of the non-existing object now
-    GoTo Finally
-Catch:
-    MsgBox "Catch"
-    Dim bFinally As Boolean 'Flag will bet set if the code was already in the Finally-block
-    ErrHandler "Command3_Click"
-    If bFinally Then Exit Sub
-Finally:
-    MsgBox "Finally"
-    bFinally = True
-    PFN.CClose
-End Sub
-
-Private Sub Command4_Click()
-    'Error will occur in the Try- and the Finally-block
-Try1: On Error GoTo Catch1
-    Dim PFN As PathFileName
-    'Set PFN = New PathFileName 'Upps we forgot to create the object
-    PFN.OOpen ' now this will lead to an error in Try
-    GoTo Finally1
-Catch1:
-    MsgBox "Catch1"
-    Dim bFinally As Boolean
-    ErrHandler "Command3_Click"
-    If bFinally Then Exit Sub
-Finally1:
-    MsgBox "Finally1"
-    bFinally = True
-    Err.Clear
-    'Set Err = Nothing
-    'Set Err = New ErrObject
-    On Error GoTo 0
-Try2: On Error GoTo Catch2
-    MsgBox "Finally"
-    'bFinally = True
-    PFN.CClose 'no this will lead to an error too, now we are in the Finally-block
-Catch2:
-    
-End Sub
-
 
 Private Sub BtnFileOpen1_Click()
     
@@ -387,6 +306,128 @@ Catch:
     If ErrHandler("ReadContent", , , , , , True) = vbRetry Then Resume Try
 Finally:
 End Function
+
+
+' v ############################## v '    Code Nesting    ' v ############################## v '
+Private Sub BtnNesting1_Click()
+    Dim i As Long: i = 1
+    Dim j As Long: j = 0
+Try1: On Error GoTo Catch1
+    'i = i / j
+Try2:   On Error GoTo Catch2
+        i = i / j
+        GoTo Finally2
+Catch2:
+        MsgBox "Catch2"
+Finally2:
+        MsgBox "Finally2"
+End_Try2:
+    GoTo Finally1
+Catch1:
+    MsgBox "Catch1"
+Finally1:
+    MsgBox "Finally1"
+End_Try1:
+End Sub
+'Result:
+'Catch2
+'Finally2
+'Finally1
+
+Private Sub BtnNesting2_Click()
+    Dim i As Long: i = 1
+    Dim j As Long: j = 0
+Try1: On Error GoTo Catch1
+    i = i / j
+Try2:   On Error GoTo Catch2
+        i = i / j
+        GoTo Finally2
+Catch2:
+        MsgBox "Catch2"
+Finally2:
+        MsgBox "Finally2"
+End_Try2:
+    GoTo Finally1
+Catch1:
+    MsgBox "Catch1"
+Finally1:
+    MsgBox "Finally1"
+End_Try1:
+End Sub
+'Result:
+'Catch1
+'Finally1
+' ^ ############################## ^ '    Code Nesting    ' ^ ############################## ^ '
+
+' v ############################## v '  Error in Try and/or Finally  ' v ############################## v '
+Private Sub BtnCompleteGuard1_Click()
+Try: On Error GoTo Catch
+    Dim file As New PathFileName: file.PFN = m_PFN
+    file.OOpen
+    GoTo Finally
+Catch:
+    ErrHandler "BtnCompleteGuard1_Click", "Catch"
+    Resume Finally
+Finally: On Error GoTo Catch2
+    file.CClose
+    GoTo End_Try
+Catch2:
+    ErrHandler "BtnCompleteGuard1_Click", "Catch2"
+End_Try:
+End Sub
+
+Private Sub BtnCompleteGuard2_Click()
+    'Error will occur only in the Try-block
+Try: On Error GoTo Catch
+    Dim file As PathFileName ': file.PFN = m_PFN
+    file.OOpen
+    GoTo Finally
+Catch:
+    ErrHandler "BtnCompleteGuard2_Click", "Catch"
+    Resume Finally
+Finally: On Error GoTo Catch2
+    'file.CClose
+    GoTo End_Try
+Catch2:
+    ErrHandler "BtnCompleteGuard2_Click", "Catch2"
+End_Try:
+End Sub
+
+Private Sub BtnCompleteGuard3_Click()
+    'Error will occur twice, in Try- and in Finally-block
+Try: On Error GoTo Catch
+    Dim file As PathFileName ': file.PFN = m_PFN
+    file.OOpen
+    GoTo Finally
+Catch:
+    ErrHandler "BtnCompleteGuard3_Click", "Catch"
+    Resume Finally
+Finally: On Error GoTo Catch2
+    file.CClose
+    GoTo End_Try
+Catch2:
+    ErrHandler "BtnCompleteGuard3_Click", "Catch2"
+End_Try:
+End Sub
+
+Private Sub BtnCompleteGuard4_Click()
+    'Error will occur only in the Finally-block
+Try: On Error GoTo Catch
+    Dim file As PathFileName ': file.PFN = m_PFN
+    'file.OOpen
+    GoTo Finally
+Catch:
+    ErrHandler "BtnCompleteGuard4_Click", "Catch"
+    Resume Finally
+Finally: On Error GoTo Catch2
+    file.CClose
+    GoTo End_Try
+Catch2:
+    ErrHandler "BtnCompleteGuard4_Click", "Catch2"
+End_Try:
+End Sub
+' ^ ############################## ^ '  Error in Try and/or Finally  ' ^ ############################## ^ '
+
 
 'copy this same function to every class or form
 'the name of the class or form will be added automatically

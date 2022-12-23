@@ -283,11 +283,57 @@ links:
 
 ### When Does The Error Occur
 
-Up to now we assumed the error occurs only in the "Try-block". But of course unfortunately it can also occur in the "Catch-" or "Finally-block".
-avoiding errors in the Catch-block is easy: only call the Error-Message and do nothing else in the Catch-block.
-However, errors in the finally-block are more likely to occur, because here we want to free and dispose api-handles like registry handles, file handles or graphic handles.
+Up to now we assumed the error occurs only in the "Try-block". But of course unfortunately it can also occur in the "Catch-" or 
+"Finally-block". Avoiding errors in the Catch-block is easy, you should only call the Error-Message and do nothing else here.
+However, errors in the Finally-block are more likely to occur, because here we want to free and dispose api-handles like registry-, 
+file- or graphic-handles, obtained in an object that maybe never got created in the first place.
 
+Many thanks to wqweto for the issue ticket and the hint to the solution
 
+There must be a feasible way for any circumstances . . . the following cases:
+* either no error message if everything is OK,
+* an error-message if error occurs only once in Try
+* an error-message if error occurs twice in Try and Finally
+* an error-message if error occurs only once in Finally  
+
+The complete guard-package of "Try-Catch-Finally-End_Try" is:
+
+```vba
+Try: On Error GoTo Catch
+    'some error-prone code here
+    GoTo Finally
+Catch:
+    ErrHandler "<NameOfFunction>", "Catch"
+    Resume Finally
+Finally: On Error GoTo Catch2
+    'another possible error could occur here
+    GoTo End_Try
+Catch2:
+    ErrHandler "<NameOfFunction>", "Catch2"
+End_Try:
+End Sub
+```
+
+have a look at the code for all 4 cases
+
+```vba
+Private Sub BtnCompleteGuard1_Click()
+Try: On Error GoTo Catch
+    Dim file As New PathFileName: file.PFN = m_PFN
+    file.OOpen
+    GoTo Finally
+Catch:
+    ErrHandler "BtnCompleteGuard1_Click", "Catch"
+    Resume Finally
+Finally: On Error GoTo Catch2
+    file.CClose
+    GoTo End_Try
+Catch2:
+    ErrHandler "BtnCompleteGuard1_Click", "Catch2"
+End_Try:
+End Sub
+
+```
 
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")
