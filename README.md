@@ -1,25 +1,25 @@
 # Err_CorrectErrorHandling  
-## How to handle errors in VBC the easy and correct way  
+## How to handle errors in VBA/VBC the easy and correct way  
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/Err_CorrectErrorHandling?style=plastic)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Err_CorrectErrorHandling?style=plastic)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/releases/latest)
 [![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Err_CorrectErrorHandling/total.svg)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/releases/download/v1.0.15/ErrorHandling_v1.0.15.zip)
 [![Follow](https://img.shields.io/github/followers/OlimilO1402.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/OlimilO1402/Err_CorrectErrorHandling/watchers)
 
-Project started around may 2005.  
+The idea started around may 2005.  
 
 ### General
 
-In VBC we often see code similar to the following
+In VBA we often see code similar to the following
 ```VBA
     On Error GoTo ErrHandler
     '. . . some error-prone code here . . .
     Exit Sub/Function/Property
 ErrHandler:
-    MsgBox Err.Description
+    MsgBox "There was an error"
 ```
 
-and most of the time they end up having plenty of MsgBoxes, doing similar things, spread all 
+and most of the time it ends up having plenty of MsgBoxes, doing similar things, spread all 
 over the code. During an error the user often is in a kind of shock-situation so don't be rude 
 and give informations what is to do now!
 
@@ -34,7 +34,7 @@ In error messages the following informations are badly needed:
 not only for the user but also for you, the developer.
 
 We could easily solve the task by using a globally available standard error message.
-So let's use a module for our error messages (like module "MErr")
+So let's use a module for our error messages, maybe we name the module "MErr".
 
 ### Syntax
 
@@ -57,13 +57,14 @@ End Sub
 ```
 
 Instead of "GoTo Finally" you could also use "Exit Sub", "Exit Function" or "Exit Property", 
-at least if we do not have to free any handles, but using "Goto Finally" instead is more 
+at least if we do not have to free any handles. But using "Goto Finally" instead is more 
 generic, because you even do not have to distinguish between Sub, Function or Property, so 
 reusing the code is made more easily.
 
 Now call the ErrHandler function, which can be private in every class, form or module.
-Add the information: "name of the function", VB already knows the name of the class or form.
-You even have the chance to call the function plenty of times, by using "Resume Try"
+VB already knows the name of the class or form with the function Typename(), so all what we 
+have to add is the name of the function.
+You even have the chance to call the Try-block more times, by using "Resume Try"
 ```vba
     If ErrHandler("Open", "Trying to open the file: " & PFN, , , , , True) = vbRetry Then
         Resume Try
@@ -194,6 +195,86 @@ End Function
 
 For a further reading I would recommend this blogpost by Gunnar Morling:  
 [What's in a Good Error Message?](https://www.morling.dev/blog/whats-in-a-good-error-message/)
+
+### When Does The Error Occur
+
+Up to now we assume the error occurs in the "Try-block". But of course unfortunately it can also occur in the "Catch-" or "Finally-block".
+In other languages like VB.net you are able to nest a different Try-Catch-Finally inside the upper Try-Catch-Finally and so on. 
+VB.net-code:
+```vba
+Private Async Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+	Dim i As Integer = 1
+	Dim j As Integer = 0
+	Try
+		'i = i / j
+		Try
+			i = i / j
+		Catch ex As Exception
+			MsgBox("Catch2")
+		Finally
+			MsgBox("Finally2")
+		End Try
+	Catch ex As Exception
+		MsgBox("Catch1")
+	Finally
+		MsgBox("Finally1")
+	End Try
+End Sub
+```
+
+Though it looks like hell, we could do this in VBA as well, if you do so U GoTo HELL anyway.
+So I would recommend not to do this, but if you ask for it, OK here is it.
+
+```vba
+Private Sub Command1_Click()
+    Dim i As Long: i = 1
+    Dim j As Long: j = 0
+Try1: On Error GoTo Catch1
+    'i = i / j
+Try2:   On Error GoTo Catch2
+        i = i / j
+        GoTo Finally2
+Catch2:
+        MsgBox "Catch2"
+Finally2:
+        MsgBox "Finally2"
+End_Try2:
+    GoTo Finally1
+Catch1:
+    MsgBox "Catch1"
+Finally1:
+    MsgBox "Finally1"
+End_Try1:
+End Sub
+'Result:
+'Catch2
+'Finally2
+'Finally1
+
+Private Sub Command2_Click()
+    Dim i As Long: i = 1
+    Dim j As Long: j = 0
+Try1: On Error GoTo Catch1
+    i = i / j
+Try2:   On Error GoTo Catch2
+        i = i / j
+        GoTo Finally2
+Catch2:
+        MsgBox "Catch2"
+Finally2:
+        MsgBox "Finally2"
+End_Try2:
+    GoTo Finally1
+Catch1:
+    MsgBox "Catch1"
+Finally1:
+    MsgBox "Finally1"
+End_Try1:
+End Sub
+'Result:
+'Catch1
+'Finally1
+```
 
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")

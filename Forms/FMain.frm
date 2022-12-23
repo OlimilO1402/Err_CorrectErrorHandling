@@ -19,6 +19,14 @@ Begin VB.Form FMain
    ScaleHeight     =   2295
    ScaleWidth      =   6975
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton Command1 
+      Caption         =   "Command1"
+      Height          =   375
+      Left            =   4920
+      TabIndex        =   9
+      Top             =   1560
+      Width           =   1935
+   End
    Begin VB.CommandButton BtnProvokeWinApiError 
       Caption         =   "Provoke WinApi Error"
       Height          =   375
@@ -138,9 +146,9 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub BtnFileOpen1_Click()
-
+    
 Try: On Error GoTo Catch
-
+    
     m_FNr1 = OOpen(m_PFN)
     
     Text1.Text = ReadContent(m_FNr1)
@@ -149,11 +157,11 @@ Try: On Error GoTo Catch
     
     GoTo Finally
 Catch:
-
+    
     If ErrHandler("BtnFileOpen1_Click", , , , , , True) = vbRetry Then Resume Try
     
 Finally:
-
+    
 End Sub
 
 Private Sub BtnFileClose1_Click()
@@ -161,10 +169,12 @@ Private Sub BtnFileClose1_Click()
     m_FNr1 = 0
     ToggleBtn1
 End Sub
+
 Public Sub ToggleBtn1()
     Me.BtnFileOpen1.Enabled = Not Me.BtnFileOpen1.Enabled
     Me.BtnFileClose1.Enabled = Not Me.BtnFileClose1.Enabled
 End Sub
+
 Public Sub ToggleBtn2()
     Me.BtnFileOpen2.Enabled = Not Me.BtnFileOpen2.Enabled
     Me.BtnFileClose2.Enabled = Not Me.BtnFileClose2.Enabled
@@ -187,14 +197,14 @@ Private Sub BtnStartExe_Click()
 End Sub
 
 
-'in VBC we often see some code simliar to the following
+'in VBC we often see some code similar to the following
 '    On Error GoTo ErrHandler
 '    '. . . some error prone code . . .
 '    Exit Sub/Function/Property
 'ErrHandler:
 '    MsgBox Err.Description
 
-'and most of the time they end up having plenty of MsgBoxes, doing similar things, spreaded all over the code.
+'and most of the time they end up having plenty of MsgBoxes, doing similar things, spread all over the code.
 
 'During an error the user often is in a kind of shock-situation
 'so don't be rude and give informations what is to do now!
@@ -220,7 +230,7 @@ Private Function OOpen(PFN As String) As Integer
     
 Try: On Error GoTo Catch
     
-    Dim FNr As Integer: If FNr = 0 Then FNr = FreeFile
+    Dim FNr As Integer: FNr = FreeFile
     
     Open PFN For Binary Access Read Lock Read Write As FNr
     
