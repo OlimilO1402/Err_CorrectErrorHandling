@@ -19,6 +19,22 @@ Begin VB.Form FMain
    ScaleHeight     =   3630
    ScaleWidth      =   6975
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton Command4 
+      Caption         =   "Error in Try and Finally"
+      Height          =   375
+      Left            =   2520
+      TabIndex        =   12
+      Top             =   2880
+      Width           =   1935
+   End
+   Begin VB.CommandButton Command3 
+      Caption         =   "Error only in Finally"
+      Height          =   375
+      Left            =   120
+      TabIndex        =   11
+      Top             =   2880
+      Width           =   1935
+   End
    Begin VB.CommandButton Command2 
       Caption         =   "Nesting 2"
       Height          =   375
@@ -204,6 +220,53 @@ End Sub
 'Catch1
 'Finally1
 ' ^ ############################## ^ '    Code Nesting    ' ^ ############################## ^ '
+
+' v ############################## v '  Error in Finally  ' v ############################## v '
+Private Sub Command3_Click()
+    'Error will occur only in the Finally-block
+Try: On Error GoTo Catch
+    Dim PFN As PathFileName
+    'Set PFN = New PathFileName 'Upps we forgot to create the object
+    'PFN.OOpen ' we do not try use any function of the non-existing object now
+    GoTo Finally
+Catch:
+    MsgBox "Catch"
+    Dim bFinally As Boolean 'Flag will bet set if the code was already in the Finally-block
+    ErrHandler "Command3_Click"
+    If bFinally Then Exit Sub
+Finally:
+    MsgBox "Finally"
+    bFinally = True
+    PFN.CClose
+End Sub
+
+Private Sub Command4_Click()
+    'Error will occur in the Try- and the Finally-block
+Try1: On Error GoTo Catch1
+    Dim PFN As PathFileName
+    'Set PFN = New PathFileName 'Upps we forgot to create the object
+    PFN.OOpen ' now this will lead to an error in Try
+    GoTo Finally1
+Catch1:
+    MsgBox "Catch1"
+    Dim bFinally As Boolean
+    ErrHandler "Command3_Click"
+    If bFinally Then Exit Sub
+Finally1:
+    MsgBox "Finally1"
+    bFinally = True
+    Err.Clear
+    'Set Err = Nothing
+    'Set Err = New ErrObject
+    On Error GoTo 0
+Try2: On Error GoTo Catch2
+    MsgBox "Finally"
+    'bFinally = True
+    PFN.CClose 'no this will lead to an error too, now we are in the Finally-block
+Catch2:
+    
+End Sub
+
 
 Private Sub BtnFileOpen1_Click()
     

@@ -277,14 +277,17 @@ End Sub
 ```
 
 links:
-
 * [YouTube: CodeAesthetic "Why You Shouldn't Nest Your Code"](https://www.youtube.com/watch?v=CFRhGnuXG-4)
 * [Repo: Langg_AvoidElse](https://github.com/OlimilO1402/Langg_AvoidElse)
 
 
 ### When Does The Error Occur
 
-Up to now we assume the error occurs in the "Try-block". But of course unfortunately it can also occur in the "Catch-" or "Finally-block".
+Up to now we assumed the error occurs only in the "Try-block". But of course unfortunately it can also occur in the "Catch-" or "Finally-block".
+avoiding errors in the Catch-block is easy: only call the Error-Message and do nothing else in the Catch-block.
+However, errors in the finally-block are more likely to occur, because here we want to free and dispose api-handles like registry handles, file handles or graphic handles.
+
+
 
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")
