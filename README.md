@@ -288,7 +288,7 @@ Up to now we assumed the error occurs only in the "Try-block". But of course unf
 However, errors in the Finally-block are more likely to occur, because here we want to free and dispose api-handles like registry-, 
 file- or graphic-handles, obtained in an object that maybe never got created in the first place.
 
-Many thanks to wqweto for the issue ticket and the hint to the solution
+Many thanks to [Vladimir Vissoultchev Alias wqweto](https://github.com/wqweto) for the issue ticket, the idea and the hints to the complete solution!
 
 There must be a feasible way for any circumstances . . . the following cases:
 * either no error message if everything is OK,
