@@ -223,7 +223,7 @@ End Sub
 ```
 
 Though it looks like hell, we could do this in VBA as well, if you do so U GoTo HELL anyway.
-So I would recommend not to do this, but if you ask for it, OK there your are:
+So I would recommend not to do this, but if you ask for it, OK there you are:
 
 ```vba
 Private Sub Command1_Click()
@@ -311,10 +311,9 @@ Finally: On Error GoTo Catch2
 Catch2:
     ErrHandler "<NameOfFunction>", "Catch2"
 End_Try:
-End Sub
 ```
 
-have a look at the code for all 4 cases
+a short example:
 
 ```vba
 Private Sub BtnCompleteGuard1_Click()
@@ -332,8 +331,8 @@ Catch2:
     ErrHandler "BtnCompleteGuard1_Click", "Catch2"
 End_Try:
 End Sub
-
 ```
 
+have a look at the code for all 4 cases in the sample-project.  
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")
