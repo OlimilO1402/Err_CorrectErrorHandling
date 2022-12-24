@@ -39,9 +39,8 @@ So let's use a module for our error messages, maybe we name the module "MErr".
 ### Syntax
 
 In VB.net there is the Try..Catch..Finally-syntax.
-This is very useful because we have a standard syntax always for the same thing
-
-But don't hesitate we can do it in VBC very similar like this:
+This is very useful because we have a standard syntax always for the same thing and every developer knows how to read it.
+But don't hesitate we can do it in VBA very similar like this:
 ```VBA
 Sub DoIt()
 Try: On Error GoTo Catch
@@ -77,7 +76,7 @@ End Sub
 
 If you, the developer, have fundamental knowledge about the errors that can occur in certain 
 situations, you should handle the error inline in your code. In such a situation there is no 
-need for "Try: On Error Goto" at all. This could be the case if for instance some API-functions or
+need for "Try: On Error" at all. This could be the case if for instance some API-functions or
 even your own functions of course, return a Boolean whether a function succeeded or not. 
 Do not use Err.Raise in the codes only meant to be used by yourself. 
 Just use Err.Raise if you develop some API-functions for other developers, like for instance 
@@ -86,7 +85,7 @@ when developing controls, or dlls.
 ### Handling Errors Explicitely
 
 In every other case for example if you develop with functions of the Windows-API use 
-"Try: On Error GoTo" if there are explicit errors to occur.
+"Try: On Error" if there are explicit errors to occur.
 In this case you get Error-codes and you have to translate them to a human readable language.
 Just handle the error-code by using the "WinApiErr"-Variable to the ErrHandler function, then 
 the error-code will be translated by using FormatMessageW.
@@ -198,32 +197,31 @@ For a further reading I would recommend this blogpost by Gunnar Morling:
 
 ### Code Nesting
 
-In other languages like VB.net we are able to nest a different Try-Catch-Finally inside the upper Try-Catch-Finally and so on. 
+In other languages like VB.net we are able to nest a different Try-Catch-Finally inside another Try-Catch-Finally and so on. 
 VB.net-code:
 
 ```vba
 Private Async Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-	Dim i As Integer = 1
-	Dim j As Integer = 0
-	Try
-		'i = i / j
-		Try
-			i = i / j
-		Catch ex As Exception
-			MsgBox("Catch2")
-		Finally
-			MsgBox("Finally2")
-		End Try
-	Catch ex As Exception
-		MsgBox("Catch1")
-	Finally
-		MsgBox("Finally1")
-	End Try
+    Dim i As Integer = 1
+    Dim j As Integer = 0
+    Try
+        'i = i / j
+        Try
+            i = i / j
+        Catch ex As Exception
+            MsgBox("Catch2")
+        Finally
+            MsgBox("Finally2")
+        End Try
+    Catch ex As Exception
+        MsgBox("Catch1")
+    Finally
+        MsgBox("Finally1")
+    End Try
 End Sub
 ```
 
-Though it looks like hell, we could do this in VBA as well, if you do so U GoTo HELL anyway.
-So I would recommend not to do this, but if you ask for it, OK there you are:
+Though it looks a bit strange, because the "syntax" is just "made of" linelabels which you can not indent, but if one asks for it, OK there you are:
 
 ```vba
 Private Sub Command1_Click()
@@ -250,36 +248,14 @@ End Sub
 'Catch2
 'Finally2
 'Finally1
-
-Private Sub Command2_Click()
-    Dim i As Long: i = 1
-    Dim j As Long: j = 0
-Try1: On Error GoTo Catch1
-    i = i / j
-Try2:   On Error GoTo Catch2
-        i = i / j
-        GoTo Finally2
-Catch2:
-        MsgBox "Catch2"
-Finally2:
-        MsgBox "Finally2"
-End_Try2:
-    GoTo Finally1
-Catch1:
-    MsgBox "Catch1"
-Finally1:
-    MsgBox "Finally1"
-End_Try1:
-End Sub
-'Result:
-'Catch1
-'Finally1
 ```
+
+If you can do something in VB.net and in VBA, does not mean you should do it. The other option could be to swap the second Try..Catch to another function.
+Maybe also have a look at the video from CodeAesthetic.
 
 links:
 * [YouTube: CodeAesthetic "Why You Shouldn't Nest Your Code"](https://www.youtube.com/watch?v=CFRhGnuXG-4)
 * [Repo: Langg_AvoidElse](https://github.com/OlimilO1402/Langg_AvoidElse)
-
 
 ### When Does The Error Occur
 
@@ -296,7 +272,7 @@ There must be a feasible way for any circumstances . . . the following cases:
 * an error-message if error occurs twice in Try and Finally
 * an error-message if error occurs only once in Finally  
 
-The complete guard-package of "Try-Catch-Finally-End_Try" is:
+The complete guard-package of "Try-Catch-Finally-End_Try" could look like:
 
 ```vba
 Try: On Error GoTo Catch
@@ -313,26 +289,31 @@ Catch2:
 End_Try:
 ```
 
-a short example:
+Have a look at the code for all 4 cases in the sample-project. (BtnCompleteGuard)
+The other option again could be to swap things out to another function with it's own "Try: On Error".
 
 ```vba
-Private Sub BtnCompleteGuard1_Click()
+Private Sub BtnCompleteGuard5_Click()
+    'swap things out to another function
 Try: On Error GoTo Catch
-    Dim file As New PathFileName: file.PFN = m_PFN
-    file.OOpen
+    TryToOpenFile
+Catch:
+    ErrHandler "BtnCompleteGuard5_Click", "Catch"
+End Sub
+
+Private Sub TryToOpenFile()
+    'Error will occur only in the Finally-block
+Try: On Error GoTo Catch
+    Dim file As PathFileName ' The object never got created
+    'file.OOpen
     GoTo Finally
 Catch:
-    ErrHandler "BtnCompleteGuard1_Click", "Catch"
-    Resume Finally
-Finally: On Error GoTo Catch2
+    ErrHandler "TryToOpenFile", "Catch"
+Finally:
     file.CClose
-    GoTo End_Try
-Catch2:
-    ErrHandler "BtnCompleteGuard1_Click", "Catch2"
-End_Try:
 End Sub
 ```
 
-have a look at the code for all 4 cases in the sample-project.  
+
 
 ![ErrorHandling Image](Resources/ErrorHandling.png "ErrorHandling Image")

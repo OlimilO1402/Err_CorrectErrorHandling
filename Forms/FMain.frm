@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin VB.Form FMain 
    Caption         =   "Error-Handling"
-   ClientHeight    =   3975
+   ClientHeight    =   3375
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   6975
+   ClientWidth     =   7350
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -16,87 +16,95 @@ Begin VB.Form FMain
    EndProperty
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3975
-   ScaleWidth      =   6975
+   ScaleHeight     =   3375
+   ScaleWidth      =   7350
    StartUpPosition =   3  'Windows-Standard
-   Begin VB.CommandButton BtnCompleteGuard2 
-      Caption         =   "Error only in Try"
+   Begin VB.CommandButton BtnCompleteGuard5 
+      Caption         =   "Error only in Finally (b)"
       Height          =   375
-      Left            =   2520
-      TabIndex        =   14
-      Top             =   3000
-      Width           =   1935
+      Left            =   4920
+      TabIndex        =   15
+      Top             =   2880
+      Width           =   2295
    End
-   Begin VB.CommandButton BtnCompleteGuard1 
-      Caption         =   "No Error at all"
+   Begin VB.CommandButton BtnCompleteGuard4 
+      Caption         =   "Error only in Finally (a)"
       Height          =   375
-      Left            =   120
-      TabIndex        =   13
-      Top             =   3000
-      Width           =   1935
+      Left            =   4920
+      TabIndex        =   11
+      Top             =   2520
+      Width           =   2295
    End
    Begin VB.CommandButton BtnCompleteGuard3 
       Caption         =   "Error in Try and Finally"
       Height          =   375
-      Left            =   120
+      Left            =   4920
       TabIndex        =   12
-      Top             =   3480
-      Width           =   1935
+      Top             =   2160
+      Width           =   2295
    End
-   Begin VB.CommandButton BtnCompleteGuard4 
-      Caption         =   "Error only in Finally"
+   Begin VB.CommandButton BtnCompleteGuard2 
+      Caption         =   "Error only in Try"
       Height          =   375
-      Left            =   2520
-      TabIndex        =   11
-      Top             =   3480
-      Width           =   1935
+      Left            =   4920
+      TabIndex        =   14
+      Top             =   1800
+      Width           =   2295
+   End
+   Begin VB.CommandButton BtnCompleteGuard1 
+      Caption         =   "No Error at all"
+      Height          =   375
+      Left            =   4920
+      TabIndex        =   13
+      Top             =   1440
+      Width           =   2295
    End
    Begin VB.CommandButton BtnNesting2 
       Caption         =   "Nesting 2"
       Height          =   375
       Left            =   2520
       TabIndex        =   10
-      Top             =   2400
-      Width           =   1935
+      Top             =   2880
+      Width           =   2295
    End
    Begin VB.CommandButton BtnNesting1 
       Caption         =   "Nesting 1"
       Height          =   375
       Left            =   120
       TabIndex        =   9
-      Top             =   2400
-      Width           =   1935
+      Top             =   2880
+      Width           =   2295
    End
    Begin VB.CommandButton BtnProvokeWinApiError 
       Caption         =   "Provoke WinApi Error"
       Height          =   375
       Left            =   4920
       TabIndex        =   8
-      Top             =   1080
-      Width           =   1935
+      Top             =   960
+      Width           =   2295
    End
    Begin VB.CommandButton BtnInfo 
       Caption         =   "Info"
       Height          =   375
       Left            =   4920
       TabIndex        =   7
-      Top             =   600
-      Width           =   1935
+      Top             =   480
+      Width           =   2295
    End
    Begin VB.TextBox Text2 
-      Height          =   1095
+      Height          =   1815
       Left            =   2520
       MultiLine       =   -1  'True
       TabIndex        =   6
-      Top             =   1080
+      Top             =   960
       Width           =   2295
    End
    Begin VB.TextBox Text1 
-      Height          =   1095
+      Height          =   1815
       Left            =   120
       MultiLine       =   -1  'True
       TabIndex        =   5
-      Top             =   1080
+      Top             =   960
       Width           =   2295
    End
    Begin VB.CommandButton BtnStartExe 
@@ -105,15 +113,15 @@ Begin VB.Form FMain
       Left            =   4920
       TabIndex        =   4
       Top             =   120
-      Width           =   1935
+      Width           =   2295
    End
    Begin VB.CommandButton BtnFileClose2 
       Caption         =   "File Close"
       Height          =   375
       Left            =   2520
       TabIndex        =   3
-      Top             =   600
-      Width           =   1935
+      Top             =   480
+      Width           =   2295
    End
    Begin VB.CommandButton BtnFileOpen2 
       Caption         =   "File Open"
@@ -121,15 +129,15 @@ Begin VB.Form FMain
       Left            =   2520
       TabIndex        =   2
       Top             =   120
-      Width           =   1935
+      Width           =   2295
    End
    Begin VB.CommandButton BtnFileClose1 
       Caption         =   "File Close"
       Height          =   375
       Left            =   120
       TabIndex        =   1
-      Top             =   600
-      Width           =   1935
+      Top             =   480
+      Width           =   2295
    End
    Begin VB.CommandButton BtnFileOpen1 
       Caption         =   "File Open"
@@ -137,7 +145,7 @@ Begin VB.Form FMain
       Left            =   120
       TabIndex        =   0
       Top             =   120
-      Width           =   1935
+      Width           =   2295
    End
 End
 Attribute VB_Name = "FMain"
@@ -165,7 +173,6 @@ Private Sub Form_Load()
     Me.BtnFileClose2.Enabled = False
     
 End Sub
-
 
 Private Sub BtnInfo_Click()
     
@@ -237,36 +244,6 @@ End Sub
 Private Sub BtnStartExe_Click()
     Shell App.Path & "\" & "ErrorHandling.exe", vbNormalFocus
 End Sub
-
-
-'in VBC we often see some code similar to the following
-'    On Error GoTo ErrHandler
-'    '. . . some error prone code . . .
-'    Exit Sub/Function/Property
-'ErrHandler:
-'    MsgBox Err.Description
-
-'and most of the time they end up having plenty of MsgBoxes, doing similar things, spread all over the code.
-
-'During an error the user often is in a kind of shock-situation
-'so don't be rude and give informations what is to do now!
-
-'In Error-Messages the following Informations are _always_ needed:
-' * the name of the class where the error occurs
-' * the name of the function where the error occurs
-' * some additional information about the specific object the filename etc.
-' * what to do next
-' * how to avoid this error
-'not only for the user but essentially for you the developer
-
-'we could easily solve the task by using a globally available standard error message
-'so lets do a module for our error messages (see module "MErr")
-
-'in VB.net we have the Try..Catch..Finally-syntax
-'this is very useful because we have a standard syntax always for the same thing
-
-'But don't hesitate we can do it in VBC very similiarly like this:
-'just add "GoTo Finally" before "Catch:"
 
 Private Function OOpen(PFN As String) As Integer
     
@@ -361,6 +338,7 @@ End Sub
 
 ' v ############################## v '  Error in Try and/or Finally  ' v ############################## v '
 Private Sub BtnCompleteGuard1_Click()
+    'No error at all
 Try: On Error GoTo Catch
     Dim file As New PathFileName: file.PFN = m_PFN
     file.OOpen
@@ -379,7 +357,7 @@ End Sub
 Private Sub BtnCompleteGuard2_Click()
     'Error will occur only in the Try-block
 Try: On Error GoTo Catch
-    Dim file As PathFileName ': file.PFN = m_PFN
+    Dim file As PathFileName ' The object never got created
     file.OOpen
     GoTo Finally
 Catch:
@@ -396,7 +374,7 @@ End Sub
 Private Sub BtnCompleteGuard3_Click()
     'Error will occur twice, in Try- and in Finally-block
 Try: On Error GoTo Catch
-    Dim file As PathFileName ': file.PFN = m_PFN
+    Dim file As PathFileName ' The object never got created
     file.OOpen
     GoTo Finally
 Catch:
@@ -413,7 +391,7 @@ End Sub
 Private Sub BtnCompleteGuard4_Click()
     'Error will occur only in the Finally-block
 Try: On Error GoTo Catch
-    Dim file As PathFileName ': file.PFN = m_PFN
+    Dim file As PathFileName ' The object never got created
     'file.OOpen
     GoTo Finally
 Catch:
@@ -425,6 +403,26 @@ Finally: On Error GoTo Catch2
 Catch2:
     ErrHandler "BtnCompleteGuard4_Click", "Catch2"
 End_Try:
+End Sub
+
+Private Sub BtnCompleteGuard5_Click()
+    'swap things out to another function
+Try: On Error GoTo Catch
+    TryToOpenFile
+Catch:
+    ErrHandler "BtnCompleteGuard5_Click", "Catch"
+End Sub
+
+Private Sub TryToOpenFile()
+    'Error will occur only in the Finally-block
+Try: On Error GoTo Catch
+    Dim file As PathFileName ' The object never got created
+    'file.OOpen
+    GoTo Finally
+Catch:
+    ErrHandler "TryToOpenFile", "Catch"
+Finally:
+    file.CClose
 End Sub
 ' ^ ############################## ^ '  Error in Try and/or Finally  ' ^ ############################## ^ '
 
