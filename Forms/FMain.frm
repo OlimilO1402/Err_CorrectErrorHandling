@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form FMain 
    Caption         =   "Error-Handling"
-   ClientHeight    =   3375
+   ClientHeight    =   3855
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   7350
@@ -16,9 +16,17 @@ Begin VB.Form FMain
    EndProperty
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3375
+   ScaleHeight     =   3855
    ScaleWidth      =   7350
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnMonadic 
+      Caption         =   "Monadic Error Handling"
+      Height          =   375
+      Left            =   120
+      TabIndex        =   16
+      Top             =   3360
+      Width           =   2295
+   End
    Begin VB.CommandButton BtnCompleteGuard5 
       Caption         =   "Error only in Finally (b)"
       Height          =   375
@@ -162,6 +170,99 @@ Private m_File As PathFileName
 
 Private Declare Function RegOpenKeyExA Lib "advapi32" ( _
     ByVal hKey As Long, ByVal lpSubKey As String, ByVal ulOptions As Long, ByVal samDesired As Long, phkResult As Long) As Long
+
+Private Sub BtnMonadic_Click()
+    'Computerphile
+    'What is a Monad? - Computerphile
+    'https://www.youtube.com/watch?v=t1e8gqXLbsU
+    '
+    'data Expr = Val Int | Div Expr Expr
+    '
+    'Math          |  Haskell
+    '1             |  Val 1
+    '6 / 2         |  Div (Val 6) (Val 2)
+    '6 / (3 / 1)   |  Div (Val 6) (Div (Val 3) (Val 1))
+    '
+    'eval :: Expr -> Int               'actually this should be a Double or a Decimal
+    'eval (Val n)   = n
+    'eval (Div x y) = eval x / eval y
+    '
+    'if y evals to a zero the program will crash
+    'what do we do to fix this problem?
+    '
+    'safediv :: Int -> Int -> Maybe Int
+    '
+    '"Maybe" is the way that we deal with things that can possibly fail in Haskell
+    '
+    'safediv n m = if m == 0 then
+    '                  Nothing
+    '              else
+    '                  Just (n / m)
+    '
+    'Nothing is one of the constructors in the Maybe-Type
+    'Just    is another    constructor  in the Maybe-type
+    '
+    'Better version:
+    '
+    'eval :: Expr -> Maybe Int
+    'eval (Val n)   = Just n
+    'eval (Div x y) = case eval x of
+    '                     Nothing -> Nothing
+    '                     Just    -> case eval y of
+    '                                    Nothing -> Nothing
+    '                                    Just m  -> safediv n m
+    'Pattern: 2 case analyses
+    'abstact them out and have them as a definition
+    'Picture:
+    '
+    '       m                      m:=Maybe
+    'case [///] of
+    '     Nothing -> Nothing
+    '     Just x  -> [\\\] x
+    '                  f           f:=function
+    '
+    'm >>= f = case m of
+    '              Nothing -> Nothing
+    '              Just x  -> f x
+    '
+    'eval :: Expr  -> Maybe Int
+    'eval (Val n)   = return n
+    'eval (Div x y) = eval x >>= (lam n ->
+    '                 eval y >>= (lam m ->
+    '                 safediv n m))
+    '13:23
+    'Do-notation what has it to do with monads
+    '
+    'eval :: Expr -> Maybe Int
+    'eval (Val n) = return n
+    'eval (Div x y) = do n <- eval x
+    '                    m <- eval y
+    '                    safediv n m
+    '
+    'The Maybe-Monad
+    '---------------
+    '   return ::  a -> Maybe a
+    '     >>=  ::
+    '
+    'it gives you a bridge between the pure world of values here
+    'and the impure world of things tha could go wrong
+    'so its a bridge from pure to impure if you like
+    '
+    'What's the point?
+    '
+    '1. Same idea works for _other_effects_ as well
+    '2. Supports _pure_programming_ with effects
+    '3. Use of effects explicit in types
+    '4. Functions that work for _any_effect_
+    '
+    'Graham Hutton "Programming in Haskell" 2. Edition
+    '
+    'Visual Basic:
+    'We have the Type Variant which itself can have either a Value or can be Empty or Nothing
+    'and so are the Nullable-Types in .net
+    'so in other words a Monad is a function that returns a Variant
+
+End Sub
 
 Private Sub Form_Load()
         
