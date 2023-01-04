@@ -11,6 +11,7 @@ Class=ExprVal; Classes\ExprVal.cls
 Module=MNew; Modules\MNew.bas
 Class=Maybe; Classes\Maybe.cls
 ResFile32="Resources\MyRes.res"
+Class=Just; Classes\Just.cls
 IconForm="FMain"
 Startup="Sub Main"
 HelpFile=""

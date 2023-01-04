@@ -22,7 +22,7 @@ Begin VB.Form FMain
    Begin VB.CommandButton BtnMonadic 
       Caption         =   "Monadic Error Handling"
       Height          =   375
-      Left            =   120
+      Left            =   2520
       TabIndex        =   16
       Top             =   3360
       Width           =   2295
@@ -172,6 +172,11 @@ Private Declare Function RegOpenKeyExA Lib "advapi32" ( _
     ByVal hKey As Long, ByVal lpSubKey As String, ByVal ulOptions As Long, ByVal samDesired As Long, phkResult As Long) As Long
 
 Private Sub BtnMonadic_Click()
+
+    'Joshua Johanan
+    'Dont throw exceptions in CSharp use Monads
+    'https://ejosh.co/de/2022/07/dont-throw-exceptions-in-csharp-use-monads/
+    
     'Computerphile
     'What is a Monad? - Computerphile
     'https://www.youtube.com/watch?v=t1e8gqXLbsU
@@ -186,7 +191,10 @@ Private Sub BtnMonadic_Click()
     'eval :: Expr -> Int               'actually this should be a Double or a Decimal
     'eval (Val n)   = n
     'eval (Div x y) = eval x / eval y
-    '
+    
+    Dim one As Expr:  Set one = MNew.ExprVal(1)
+    Dim res As Maybe: Set res = one.Eval
+    Dim six As Expr:  Set six = MNew.ExprVal(6)
     'if y evals to a zero the program will crash
     'what do we do to fix this problem?
     '
