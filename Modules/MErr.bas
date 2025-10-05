@@ -19,6 +19,14 @@ Private Const FORMAT_MESSAGE_ARGUMENT_ARRAY  As Long = &H2000
 #End If
 Public ErrLog As String
 
+Public Function Assert(ByVal Condition As Boolean, Optional ByVal ClsName As String, Optional ByVal FncName As String, Optional AddInfo As String = "", Optional WinApiErr) As Boolean
+    Assert = Condition: If Assert Then Exit Function
+    MessError ClsName, FncName, AddInfo, WinApiErr
+End Function
+'to assert= behaupten, erklären, feststellen, beteuern, versichern, geltend machen, durchsetzen, einen Anspruch geltend machen
+'call this function like:
+'Debug.Assert Assert(Variant <> Empty, "MyClass", "MyFunction")
+
 'here 4 different ways to get the error-code and 2 different
 'ways to translate the error-code to a human readable string
 ' * VBC-Runtime:
@@ -38,7 +46,7 @@ Public Function MessError(ClsName As String, FncName As String, _
         
         Dim sErr As String:  sErr = ClsName & "::" & FncName
         If Len(AddInfo) Then sErr = sErr & vbCrLf & "Info:   " & AddInfo
-        If Err.Number Then sErr = sErr & vbCrLf & "ErrNr " & Err.Number & " (&H" & Hex(Err.Number) & "): " & Err.Description
+        If Err.number Then sErr = sErr & vbCrLf & "ErrNr " & Err.number & " (&H" & Hex(Err.number) & "): " & Err.Description
         If Err.LastDllError Then sErr = sErr & vbCrLf & "DllErrNr: " & Err.LastDllError & ": " & WinApiError_ToStr(Err.LastDllError) '& Err.Description
         Dim LastError As Long: LastError = GetLastError
         If LastError Then sErr = sErr & vbCrLf & "LastError " & LastError & ": " & WinApiError_ToStr(LastError)

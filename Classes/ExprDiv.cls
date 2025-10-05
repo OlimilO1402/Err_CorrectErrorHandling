@@ -17,11 +17,16 @@ Implements Expr
 Private m_dividend As Expr
 Private m_divisor  As Expr
 
-Friend Sub New_()
+Friend Sub New_(dividend As Expr, divisor As Expr)
     Set m_dividend = dividend
     Set m_divisor = divisor
 End Sub
 
+'copy to MNew:
+'Public Function ExprDiv(dividend As Expr, divisor As Expr) As ExprDiv
+'    Set ExprDiv = New ExprDiv: ExprDiv.New_ dividend, divisor
+'End Function
+
 Private Function Expr_Eval() As Variant
-    '
+    Expr_Eval = m_dividend.Eval / m_divisor.Eval
 End Function

@@ -6,8 +6,8 @@ Begin VB.Form FMain
    ClientTop       =   465
    ClientWidth     =   7350
    BeginProperty Font 
-      Name            =   "Tahoma"
-      Size            =   8.25
+      Name            =   "Segoe UI"
+      Size            =   9
       Charset         =   0
       Weight          =   400
       Underline       =   0   'False
@@ -19,6 +19,14 @@ Begin VB.Form FMain
    ScaleHeight     =   3855
    ScaleWidth      =   7350
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnTestFncAssert 
+      Caption         =   "Test Function Assert"
+      Height          =   375
+      Left            =   4920
+      TabIndex        =   17
+      Top             =   3360
+      Width           =   2295
+   End
    Begin VB.CommandButton BtnMonadic 
       Caption         =   "Monadic Error Handling"
       Height          =   375
@@ -271,6 +279,25 @@ Private Sub BtnMonadic_Click()
     'so in other words a Monad is a function that returns a Variant
 
 End Sub
+
+Private Sub BtnTestFncAssert_Click()
+    
+    MsgBox "Testing Function Assert():"
+    MsgBox "We define a variable 'taf As TestingAssertFoo', but we forgot to assigen a value to the member 'Bar As Variant'"
+    Dim taf As TestingAssertFoo
+    
+    MsgBox "now we hand the variable 'taf' over to a function 'morphfoo'."
+    morphFoo taf
+    
+End Sub
+
+Private Function morphFoo(aFoo As TestingAssertFoo) As Long
+    MsgBox "In the function morphfoo we try to get value from the 'foo'"
+    MsgBox "The following message you will only get to see in debug-mode during designtime"
+    'note: every debug-line will be removed in kompiledexe-Release, so will only be executed during debug
+    Debug.Assert Assert(aFoo.Bar <> Empty, TypeName(Me), "morphFoo", "foo.Bar must not be empty")
+    morphFoo = aFoo.Bar
+End Function
 
 Private Sub Form_Load()
         
