@@ -470,6 +470,26 @@ End Sub
 'Result:
 'Catch1
 'Finally1
+'or just simply:
+Private Sub BtnNesting3_Click()
+    Dim d As Double
+Try1: On Error GoTo Finally1
+    'd = 1 / 0
+Try2:     On Error GoTo Finally2
+    'd = 2 / 0
+Try3:         On Error GoTo Finally3
+    d = 3 / 0
+Finally3:     On Error GoTo Finally2
+    MsgBox "OK we reached Finally3"
+    Debug.Print "OK we reached Finally3"
+Finally2: On Error GoTo Finally1
+    MsgBox "OK we reached Finally2"
+    Debug.Print "OK we reached Finally2"
+Finally1:
+    MsgBox "OK we reached Finally1"
+    Debug.Print "OK we reached Finally1"
+End Sub
+
 ' ^ ############################## ^ '    Code Nesting    ' ^ ############################## ^ '
 
 ' v ############################## v '  Error in Try and/or Finally  ' v ############################## v '
