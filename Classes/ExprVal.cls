@@ -20,6 +20,6 @@ Friend Sub New_(ByVal number)
 End Sub
 
 Private Function Expr_Eval() As Variant
-    Expr_Eval = number
+    Expr_Eval = m_number
 End Function
 

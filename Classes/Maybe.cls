@@ -80,7 +80,7 @@ End Property
 '            return Tag == MaybeType.Just;
 '        }
 Public Function MatchJust(ByRef Value_out) As Boolean
-    Value_out = IIf(Tag = MaybeType.mtJust, Me.Value, Nothing)
+    Value_out = IIf(Tag = MaybeType.mtJust, Me.Tag, Nothing)
     MatchJust = Tag = MaybeType.mtJust
 End Function
 '        /// <summary>

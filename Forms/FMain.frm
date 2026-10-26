@@ -180,7 +180,9 @@ Private Declare Function RegOpenKeyExA Lib "advapi32" ( _
     ByVal hKey As Long, ByVal lpSubKey As String, ByVal ulOptions As Long, ByVal samDesired As Long, phkResult As Long) As Long
 
 Private Sub BtnMonadic_Click()
-
+    MsgBox "Not yet implemented! have a look:" & vbCrLf & "Joshua Johanan: 'Dont throw exceptions in CSharp use Monads'" & vbCrLf & _
+           "https://ejosh.co/de/2022/07/dont-throw-exceptions-in-csharp-use-monads/"
+    Exit Sub
     'Joshua Johanan
     'Dont throw exceptions in CSharp use Monads
     'https://ejosh.co/de/2022/07/dont-throw-exceptions-in-csharp-use-monads/
@@ -304,7 +306,7 @@ Private Sub Form_Load()
     Me.Caption = Me.Caption & " v" & App.Major & "." & App.Minor & "." & App.Revision
     'for being able to show correct error handling we have to provoke an error at first.
     m_PFN = App.Path & "\testfile.txt"
-    Set m_File = New PathFileName: m_File.PFN = m_PFN
+    Set m_File = New PathFileName: m_File.Value = m_PFN
     Me.BtnFileClose1.Enabled = False
     Me.BtnFileClose2.Enabled = False
     
@@ -336,7 +338,7 @@ Try: On Error GoTo Catch
     
     m_FNr1 = OOpen(m_PFN)
     
-    Text1.Text = ReadContent(m_FNr1)
+    Text1.text = ReadContent(m_FNr1)
     
     If m_FNr1 Then ToggleBtn1
     
@@ -366,8 +368,8 @@ Public Sub ToggleBtn2()
 End Sub
 
 Private Sub BtnFileOpen2_Click()
-    m_FNr2 = m_File.OOpen()
-    Text2.Text = m_File.ReadContent
+    m_FNr2 = m_File.OpenFile()
+    Text2.text = m_File.ReadAllText
     If m_FNr2 Then ToggleBtn2
 End Sub
 
@@ -381,13 +383,13 @@ Private Sub BtnStartExe_Click()
     Shell App.Path & "\" & "ErrorHandling.exe", vbNormalFocus
 End Sub
 
-Private Function OOpen(PFN As String) As Integer
+Private Function OOpen(pfn As String) As Integer
     
 Try: On Error GoTo Catch
     
     Dim FNr As Integer: FNr = FreeFile
     
-    Open PFN For Binary Access Read Lock Read Write As FNr
+    Open pfn For Binary Access Read Lock Read Write As FNr
     
     OOpen = FNr
     
@@ -399,7 +401,7 @@ Catch:
     'call the ErrHandler function, which can be private in every class, form or module
     'add the information: "name of the function", the name of the class or form is known
     'you even have the chance to call the function more times
-    If ErrHandler("Open", "Trying to open the file: " & PFN, , , , , True) = vbRetry Then Resume Try
+    If ErrHandler("Open", "Trying to open the file: " & pfn, , , , , True) = vbRetry Then Resume Try
 
 Finally:
 End Function
@@ -496,14 +498,14 @@ End Sub
 Private Sub BtnCompleteGuard1_Click()
     'No error at all
 Try: On Error GoTo Catch
-    Dim file As New PathFileName: file.PFN = m_PFN
-    file.OOpen
+    Dim file As New PathFileName: file.Value = m_PFN
+    file.OpenFile
     GoTo Finally
 Catch:
     ErrHandler "BtnCompleteGuard1_Click", "Catch"
     Resume Finally
 Finally: On Error GoTo Catch2
-    file.CClose
+    file.CloseFile
     GoTo End_Try
 Catch2:
     ErrHandler "BtnCompleteGuard1_Click", "Catch2"
@@ -514,7 +516,7 @@ Private Sub BtnCompleteGuard2_Click()
     'Error will occur only in the Try-block
 Try: On Error GoTo Catch
     Dim file As PathFileName ' The object never got created
-    file.OOpen
+    file.OpenFile
     GoTo Finally
 Catch:
     ErrHandler "BtnCompleteGuard2_Click", "Catch"
@@ -531,13 +533,13 @@ Private Sub BtnCompleteGuard3_Click()
     'Error will occur twice, in Try- and in Finally-block
 Try: On Error GoTo Catch
     Dim file As PathFileName ' The object never got created
-    file.OOpen
+    file.OpenFile
     GoTo Finally
 Catch:
     ErrHandler "BtnCompleteGuard3_Click", "Catch"
     Resume Finally
 Finally: On Error GoTo Catch2
-    file.CClose
+    file.CloseFile
     GoTo End_Try
 Catch2:
     ErrHandler "BtnCompleteGuard3_Click", "Catch2"
@@ -547,14 +549,14 @@ End Sub
 Private Sub BtnCompleteGuard4_Click()
     'Error will occur only in the Finally-block
 Try: On Error GoTo Catch
-    Dim file As PathFileName ' The object never got created
-    'file.OOpen
+    Dim file As PathFileName ' The object never gets created
+    'file.OpenFile
     GoTo Finally
 Catch:
     ErrHandler "BtnCompleteGuard4_Click", "Catch"
     Resume Finally
 Finally: On Error GoTo Catch2
-    file.CClose
+    file.CloseFile
     GoTo End_Try
 Catch2:
     ErrHandler "BtnCompleteGuard4_Click", "Catch2"
@@ -578,7 +580,7 @@ Try: On Error GoTo Catch
 Catch:
     ErrHandler "TryToOpenFile", "Catch"
 Finally:
-    file.CClose
+    file.CloseFile
 End Sub
 ' ^ ############################## ^ '  Error in Try and/or Finally  ' ^ ############################## ^ '
 
